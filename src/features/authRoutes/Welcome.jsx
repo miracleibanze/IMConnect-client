@@ -21,7 +21,7 @@ import { AppContext } from '../../App';
 
 const Hero = lazy(() => import('../../components/Hero.jsx'));
 const CreatePost = lazy(() => import('../../components/CreatePost.jsx'));
-const AllMessages = lazy(() => import('../messageRoutes/allMessages.jsx'));
+const AllMessages = lazy(() => import('../messageRoutes/AllMessages.jsx'));
 const MyFriends = lazy(() => import('../messageRoutes/MyFriends.jsx'));
 const People = lazy(() => import('../profileRoutes/People.jsx'));
 const Person = lazy(() => import('../profileRoutes/Person.jsx'));
