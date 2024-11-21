@@ -124,7 +124,7 @@ const CreatePost = () => {
               className="w-full outline-none h-full bg-transparent resize-none"
               placeholder="Description.."
               onChange={(event) => setMyDescription(event.target.value)}
-              defaultValue={text && text}
+              defaultValue={text && text !== 'content' ? text : ''}
             ></textarea>
           </div>
           {postPartToEdit === 'myPost' && myLocation !== '' && (

@@ -61,7 +61,7 @@ const WhatInYourMind = ({ className }) => {
       <div className="flex items-center justify-between gap-1 pt-2 relative">
         <div
           className="flex items-center gap-1"
-          onClick={() => navigate(`/dash/post/${text}`)}
+          onClick={() => navigate(`/dash/post/${text || 'content'}`)}
         >
           {postIcons.map((item) => (
             <div

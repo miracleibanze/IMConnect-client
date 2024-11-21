@@ -7,7 +7,7 @@ const Loader = ({ reload }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate(0);
+      // navigate(0);
     }, 10000);
 
     return () => clearTimeout(timer);
