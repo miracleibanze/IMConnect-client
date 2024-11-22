@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 const Notice = ({ message, onClose, duration = 3000 }) => {
   useEffect(() => {
@@ -11,8 +11,8 @@ const Notice = ({ message, onClose, duration = 3000 }) => {
 
   return (
     <div
-      className={`fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transition-transform duration-500 ease-in-out transform translate-x-full ${
-        message ? "translate-x-0" : "translate-x-full"
+      className={`fixed bottom-5 right-0 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transition-transform duration-500 ease-in-out transform translate-x-full ${
+        message ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
       {message}

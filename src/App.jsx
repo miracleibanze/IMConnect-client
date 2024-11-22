@@ -9,9 +9,10 @@ import { createContext, lazy, Suspense, useEffect, useState } from 'react';
 import PageNotFound from './components/PageNotFound.jsx';
 import Loader from './components/skeletons/Loader.jsx';
 import axiosInstance from './features/utils/axiosInstance.js';
+import Register from './features/authRoutes/Register.jsx'; // Non-lazy import
+import Public from './components/Public.jsx'; // Non-lazy import
+import WelcomeSkeleton from './components/skeletons/WelcomeSkeleton.jsx';
 
-const Register = lazy(() => import('./features/authRoutes/Register.jsx'));
-const Public = lazy(() => import('./components/Public.jsx'));
 const Welcome = lazy(() => import('./features/authRoutes/Welcome.jsx'));
 
 export const AppContext = createContext();
@@ -61,33 +62,37 @@ const App = () => {
 
   return (
     <AppContext.Provider value={{ user, setUser, setIsLogged }}>
-      <Suspense fallback={<Loader />}>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <Routes>
-            {/* Public Routes (Accessible when not logged in) */}
-            {!isLogged && (
-              <>
-                <Route path="/" element={<Public />} />
-                <Route path="/auth/:logType" element={<Register />} />
-              </>
-            )}
-
-            {/* Routes accessible to logged-in users */}
-            {isLogged && (
-              <>
-                <Route path="/" element={<Public />} />
-                <Route path="/dash/*" element={<Welcome />} />
-                <Route path="/auth/:logType" element={<Register />} />
-                <Route path="*" element={<PageNotFound />} />
-              </>
-            )}
-
-            {/* Default route to handle page not found */}
-          </Routes>
+      <Routes>
+        {!isLogged && (
+          <>
+            <Route path="/" element={!isLoading ? <Public /> : <Loader />} />
+            <Route
+              path="/auth/:logType"
+              element={!isLoading ? <Register /> : <Loader />}
+            />
+          </>
         )}
-      </Suspense>
+
+        {isLogged && (
+          <>
+            <Route path="/" element={!isLoading ? <Public /> : <Loader />} />
+            <Route
+              path="/dash/*"
+              element={
+                <Suspense fallback={<WelcomeSkeleton />}>
+                  <Welcome />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auth/:logType"
+              element={!isLoading ? <Register /> : <Loader />}
+            />
+            <Route path="*" element={<PageNotFound />} />
+          </>
+        )}
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </AppContext.Provider>
   );
 };

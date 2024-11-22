@@ -1,48 +1,57 @@
 import { memo, useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
-import axios from 'axios';
 import Loader from './skeletons/Loader';
 import { userSvg } from '../assets';
 import axiosInstance from '../features/utils/axiosInstance';
 
 const Sidebar2 = () => {
-  const [people, setPeople] = useState();
+  const [people, setPeople] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const context = useContext(AppContext);
+
   if (!context) return <Loader />;
+
   const { user } = context;
-  const [loading, setloading] = useState(true);
+
   useEffect(() => {
     const handlePeople = async () => {
       try {
-        setloading(true);
-        const response = await axiosInstance.get(`/users/friends/${user._id}`);
+        setLoading(true);
+        setError(null);
+        const response = await axiosInstance.get(`/users/friends/${user?._id}`);
         setPeople(response.data);
-        setloading(false);
       } catch (error) {
-        console.log('Error fetching feeds:', error);
+        console.error('Error fetching friends:', error);
+        setError('Failed to fetch friends. Please try again.');
+      } finally {
+        setLoading(false);
       }
     };
 
-    handlePeople();
-  }, []);
+    if (user?._id) handlePeople();
+  }, [user?._id]);
 
-  return !loading ? (
+  if (loading) return <Loader />;
+  if (error) return <p className="text-red-500">{error}</p>;
+
+  return (
     <div className="flex flex-col rounded-md w-full bg-zinc-100 pt-16 p-2 flex-between-vert">
       <div className="flex flex-col w-full gap-2 mb-4">
         <p className="body-2 font-bold h-5">Friends</p>
-        {people?.length > 0 ? (
-          people.map((person) => (
+        {people.length > 0 ? (
+          people.map((person, index) => (
             <a
-              href={`/dash/people/person/${person.username}`}
+              href={`/dash/people/person/${person?.username || 'username'}`}
               className="flex gap-1 items-center"
-              key={person._id}
+              key={person?._id || index}
             >
               <img
-                src={person.image ? person.image : userSvg}
+                src={person.image || userSvg}
                 className="h-8 w-8 rounded-md object-cover object-top p-1 border"
               />
               <p className="caption leading-none hover:underline cursor-pointer">
-                {person.names}
+                {person?.names || 'unknown'}
               </p>
             </a>
           ))
@@ -63,8 +72,6 @@ const Sidebar2 = () => {
         <br />
       </a>
     </div>
-  ) : (
-    <p>Loading</p>
   );
 };
 

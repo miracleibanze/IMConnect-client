@@ -56,8 +56,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage(error?.response?.data.message || error.message);
-      alert(error?.message || 'An error occurred');
+      setErrorMessage(error?.response?.data?.message);
     } finally {
       setloading(false);
     }
@@ -83,7 +82,7 @@ const Login = () => {
             placeholder="Enter your username or email"
             required
           />
-          {errorMessage === 'email' && (
+          {errorMessage === 'user' && (
             <span className="italic text-red-500">
               Email not found! Please check
             </span>

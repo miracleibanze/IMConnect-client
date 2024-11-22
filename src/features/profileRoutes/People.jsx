@@ -21,7 +21,6 @@ const People = () => {
       try {
         const response = await axiosInstance.get(`/users/${user.username}`);
         setFriends(response.data.friends);
-
         setNonFriends(response.data.nonFriends);
       } catch (error) {
         console.log('Error fetching feeds:', error);

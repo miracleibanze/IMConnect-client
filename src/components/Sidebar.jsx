@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import { context } from '../features/authRoutes/Welcome';
 import { menuSvg, xSvg } from '../assets';
 import {
   bottomSidebarLinks,
@@ -8,18 +7,15 @@ import {
 } from './constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from './skeletons/Loader';
-import Button from './design/Button';
 import DeleteModal from './DeleteModal';
 import { AppContext } from '../App';
 
-const Sidebar = () => {
+const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
   const appContext = useContext(AppContext);
-  const mycontext = useContext(context);
   const [logout, setLogout] = useState(false);
 
-  if (!mycontext || !appContext) return <Loader />;
+  if (!appContext) return <Loader />;
   const { setUser } = appContext;
-  const { wrapped, setWrapped, setSearchBox } = mycontext;
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const [loggingOut, setLoggingOut] = useState(false);
@@ -30,7 +26,7 @@ const Sidebar = () => {
     navigate('/');
     setLoggingOut(false);
   };
-  const content = mycontext ? (
+  return (
     <>
       <div
         className={`${
@@ -140,11 +136,7 @@ const Sidebar = () => {
         </>
       )}
     </>
-  ) : (
-    <Loader />
   );
-
-  return content;
 };
 
 export default Sidebar;

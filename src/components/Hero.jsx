@@ -1,11 +1,11 @@
-import { useLocation } from "react-router-dom";
-import WhatInYourMind from "./WhatInYourMind";
-import Feeds from "./Feeds";
+import { useLocation } from 'react-router-dom';
+import WhatInYourMind from './WhatInYourMind';
+import Feeds from './Feeds';
 const Hero = () => {
   const { pathname } = useLocation();
   return (
-    <div className="bg-zinc-100 p-3 rounded-md flex flex-col w-full h-max min-h-screen gap-4">
-      {pathname !== "/dash/search" && <WhatInYourMind />}
+    <div className="bg-zinc-100 p-3 rounded-md w-full h-full relative">
+      {pathname !== '/dash/search' && <WhatInYourMind />}
       <Feeds />
     </div>
   );

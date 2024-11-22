@@ -40,7 +40,7 @@ const WhatInYourMind = ({ className }) => {
 
   return (
     <div
-      className={`w-full col-span-2 bg-zinc-200 p-2 rounded-md ${className}`}
+      className={`w-full col-span-2 bg-zinc-200 p-2 rounded-md mb-4 ${className}`}
     >
       <div className="w-full flex items-center gap-2">
         <img
