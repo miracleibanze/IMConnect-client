@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import axios from 'axios';
-import { AppContext } from '../../App';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/design/Button';
 import { arrowSvg, sendSvg, threeDotsVerticalSvg, userSvg } from '../../assets';
 import { connectSocket } from '../utils/Socket';
 import Loader from '../../components/skeletons/Loader';
 import axiosInstance from '../utils/axiosInstance';
+import Notice from '../../components/design/Notice';
+import { AppContext } from '../../components/AppContext';
 
 const MyFriends = () => {
   const { user } = useContext(AppContext);
@@ -14,6 +14,7 @@ const MyFriends = () => {
   const [messages, setMessages] = useState([]);
   const [person, setperson] = useState();
   const [messageMenu, setmessageMenu] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { userId } = useParams();
   const otherUserId = userId || 'unknown';
@@ -22,7 +23,7 @@ const MyFriends = () => {
   useEffect(() => {
     const socket = connectSocket();
 
-    socket.emit('joinRoom', user._id);
+    socket.emit('joinRoom', user?._id);
 
     socket.on('newMessage', (newMessage) => {
       if (
@@ -48,7 +49,7 @@ const MyFriends = () => {
       socket.off('messages');
       socket.off('newMessage');
     };
-  }, [user._id, otherUserId]);
+  }, [user, otherUserId]);
 
   const handleSendMessage = async () => {
     if (!messageContent) return;
@@ -106,7 +107,7 @@ const MyFriends = () => {
     };
 
     fetchMessages();
-  }, [user.username, otherUserId]);
+  }, [user, otherUserId]);
 
   const markMessagesAsRead = async () => {
     try {
@@ -133,6 +134,7 @@ const MyFriends = () => {
 
   return (
     <div className="w-full h-full bg-zinc-100 flex-between-vert p-2 relative">
+      <Notice message={error} onClose={() => setError('')} />
       <span className="w-full border-b border-zinc-300 py-2">
         <img
           src={arrowSvg}
@@ -211,7 +213,14 @@ const MyFriends = () => {
                           : 'bg-neutral-300 text-teal-800 rounded-bl-none'
                       }`}
                     >
-                      {msg.message}
+                      {msg.image ? (
+                        <img
+                          src={msg.message}
+                          className="w-full max-w-2/3 h-auto"
+                        />
+                      ) : (
+                        <span>{msg.message}</span>
+                      )}
                     </span>
                   </div>
                 ))}

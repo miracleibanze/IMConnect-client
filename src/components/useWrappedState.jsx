@@ -15,3 +15,5 @@ export const useWrappedState = () => {
 
   return { wrapped, setWrapped, searchBox, setSearchBox };
 };
+
+export default useWrappedState;

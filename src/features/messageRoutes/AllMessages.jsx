@@ -1,18 +1,17 @@
-import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../../App';
-import Loader from '../../components/skeletons/Loader';
 import { userSvg } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
+import ListSkeleton from '../../components/skeletons/ListSkeleton';
+import { AppContext } from '../../components/AppContext';
 
 const MessageComponent = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  if (!context) return <Loader />;
+  if (!context) return <ListSkeleton message />;
   const { user } = context;
   const [friends, setfriends] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(true);
 
   function getTime(isoString) {
     const date = new Date(isoString);
@@ -46,13 +45,13 @@ const MessageComponent = () => {
       }
     };
     fetchChatParticipants();
-  }, []);
+  }, [user]);
   return (
     <div className="bg-zinc-100 rounded-md px-3 w-full py-6 h-full min-h-max overflow-x-hidden relative">
       <h4 className="h4 font-semibold border-b border-zinc-500/50 pb-3 mb-3">
         Messages
       </h4>
-      {/* <h1 className="h1">{typeof friends}</h1> */}
+
       <div className="relative h-full w-full">
         {!loading ? (
           <>
@@ -95,7 +94,7 @@ const MessageComponent = () => {
             )}
           </>
         ) : (
-          <Loader />
+          <ListSkeleton message />
         )}
       </div>
     </div>

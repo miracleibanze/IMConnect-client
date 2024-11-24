@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { memo, useContext, useState } from 'react';
 import { menuSvg, xSvg } from '../assets';
 import {
   bottomSidebarLinks,
@@ -8,7 +8,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from './skeletons/Loader';
 import DeleteModal from './DeleteModal';
-import { AppContext } from '../App';
+import { AppContext } from './AppContext';
 
 const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
   const appContext = useContext(AppContext);
@@ -26,6 +26,9 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
     navigate('/');
     setLoggingOut(false);
   };
+  const toggleWrapped = () => {
+    setWrapped(!wrapped);
+  };
   return (
     <>
       <div
@@ -42,13 +45,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
               ? 'w-8 h-8 mx-auto mt-4'
               : 'w-6 rounded-tr-md h-6 absolute max-sm:hidden sm:top-4 sm:right-4 top-2 right-2'
           }`}
-          onClick={() => {
-            if (wrapped) {
-              setWrapped(false);
-            } else {
-              setWrapped(true);
-            }
-          }}
+          onClick={toggleWrapped}
         />
         <div
           className={`h-full min-w-full max-w-full flex flex-col justify-between items-center ${
@@ -68,6 +65,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
                   } else {
                     navigate(item.link);
                   }
+                  setWrapped(true);
                 }}
               >
                 <img
@@ -89,7 +87,10 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
                   item.id === 2 && 'bg-zinc-50 rounded-md'
                 }`}
                 key={item.id}
-                onClick={() => navigate(item.link)}
+                onClick={() => {
+                  navigate(item.link);
+                  setWrapped(true);
+                }}
               >
                 <img
                   src={item.icon}
@@ -101,7 +102,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           </div>
           <div className={`${wrapped ? 'w-max' : 'w-full'} h-1/4`}>
             {bottomSidebarLinks.map((item) => (
-              <div
+              <button
                 className={`cursor-pointer w-full py-2 font-semibold sm:px-4 hover:bg-slate-300/50 flex items-center gap-2  ${
                   location === `${item.link}` && 'bg-zinc-50 rounded-md'
                 }`}
@@ -112,14 +113,15 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
                   } else {
                     navigate(`${item.link}`);
                   }
+                  setWrapped(true);
                 }}
               >
                 <img
                   src={item.icon}
-                  className={`${!wrapped ? 'h-4' : 'h-5'} aspect-square`}
+                  className={`${!wrapped ? 'h-4' : 'h-6'} aspect-square`}
                 />
                 <p className={`${wrapped ? 'hidden' : 'flex'}`}>{item.name}</p>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -139,4 +141,4 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
   );
 };
 
-export default Sidebar;
+export default memo(Sidebar);

@@ -1,12 +1,11 @@
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { AppContext } from '../App';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 import Button from './design/Button';
-import { loaderSvg, plusSvg, uploadCloud, userSvg } from '../assets';
+import { plusSvg, userSvg } from '../assets';
 import { postFeeling, postIcons } from './constants';
 import Loader from './skeletons/Loader';
-import axios from 'axios';
 import axiosInstance from '../features/utils/axiosInstance';
+import { AppContext } from './AppContext';
 
 const CreatePost = () => {
   const context = useContext(AppContext);
@@ -16,24 +15,17 @@ const CreatePost = () => {
   const navigate = useNavigate();
   const [postPartToEdit, setPostPartToEdit] = useState('myPost');
   const [feeling, setFeeling] = useState('');
-
   const { text } = useParams();
-
-  const [waitResult, setWaitResult] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
   const [images, setImages] = useState([]);
-  const [myLocation, setMyLocation] = useState('');
   const [myDescription, setMyDescription] = useState(``);
-
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
 
   const savePost = async () => {
     const myPostObject = {
       user: user._id,
       images: images,
       feeling: `feeling ${feeling}`,
-      description: myDescription.replace(/\n/g, '<br />'),
+      description: myDescription, // Save raw text
     };
     try {
       const response = await axiosInstance.post('/posts', myPostObject);
@@ -127,9 +119,6 @@ const CreatePost = () => {
               defaultValue={text && text !== 'content' ? text : ''}
             ></textarea>
           </div>
-          {postPartToEdit === 'myPost' && myLocation !== '' && (
-            <div className="body-2">at {myLocation}</div>
-          )}
 
           <div className="absolute bottom-2 p-4 right-0 left-0">
             <div className="flex items-center gap-3">

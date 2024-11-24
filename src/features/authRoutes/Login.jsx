@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import Button from '../../components/design/Button';
-import axios from 'axios';
-import { AppContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import { loaderSvg } from '../../assets';
+import { AppContext } from '../../components/AppContext';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -56,7 +55,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage(error?.response?.data?.message);
+      setErrorMessage(error?.response?.data?.message || error?.message);
     } finally {
       setloading(false);
     }

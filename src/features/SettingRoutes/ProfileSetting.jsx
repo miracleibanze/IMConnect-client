@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../App';
 import Loader from '../../components/skeletons/Loader';
 import { arrowSvg, editSvg, userSvg } from '../../assets';
 import Button from '../../components/design/Button';
 import axiosInstance from '../utils/axiosInstance';
 import Notice from '../../components/design/Notice';
+import { AppContext } from '../../components/AppContext';
 
 const ProfileSetting = () => {
   const navigate = useNavigate();

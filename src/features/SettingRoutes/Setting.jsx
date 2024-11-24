@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import { arrowSvg } from '../../assets';
 import Button from '../../components/design/Button';
 import { useContext, useState } from 'react';
-import { AppContext } from '../../App';
 import Loader from '../../components/skeletons/Loader';
 import DeleteModal from '../../components/DeleteModal';
 import axiosInstance from '../utils/axiosInstance';
+import { AppContext } from '../../components/AppContext';
 
 const Setting = () => {
   const navigate = useNavigate();

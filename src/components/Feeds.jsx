@@ -1,14 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import PostCard from './design/PostCard';
 import PersonCard from './design/PersonCard';
-import { context } from '../features/authRoutes/Welcome';
 import axiosInstance from '../features/utils/axiosInstance';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Loader from './skeletons/Loader';
-import { AppContext } from '../App';
+import FeedsSkeleton from './skeletons/FeedsSkeleton';
+import { AppContext } from './AppContext';
 
 const Feeds = () => {
-  const myContext = useContext(context);
   const { user } = useContext(AppContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -59,7 +57,6 @@ const Feeds = () => {
     handleGetFeeds();
   }, [location.search, nameParam, textParam, user, navigate]);
 
-  if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
@@ -75,19 +72,25 @@ const Feeds = () => {
           <h4 className="h4 mb-4 font-semibold px-4 border-b border-zinc-500/50">
             People
           </h4>
-          {people.length > 0 ? (
-            people.map((item) => (
-              <PersonCard
-                key={item.id || item._id}
-                person={item}
-                className="hover:bg-zinc-100/70"
-              />
-            ))
-          ) : (
-            <div className="body-2 font-semibold text-zinc-700/50 text-center min-h-[10rem]">
-              No people found
-            </div>
-          )}
+          <div className="relative w-full h-full">
+            {!loading ? (
+              people.length > 0 ? (
+                people.map((item) => (
+                  <PersonCard
+                    key={item.id || item._id}
+                    person={item}
+                    className="hover:bg-zinc-100/70"
+                  />
+                ))
+              ) : (
+                <div className="body-2 font-semibold text-zinc-700/50 text-center min-h-[10rem]">
+                  No people found
+                </div>
+              )
+            ) : (
+              <FeedsSkeleton />
+            )}
+          </div>
         </div>
       )}
 
@@ -95,15 +98,21 @@ const Feeds = () => {
         <h4 className="h4 mb-4 font-semibold px-4 border-b border-zinc-500/50">
           Posts
         </h4>
-        {posts.length > 0 ? (
-          posts.map((item) => (
-            <PostCard key={item.id || item._id} post={item} />
-          ))
-        ) : (
-          <h4 className="body-2 text-zinc-700/50 min-h-[7rem] w-full text-center font-semibold">
-            No posts found
-          </h4>
-        )}
+        <div className="relative h-full w-full">
+          {!loading ? (
+            posts.length > 0 ? (
+              posts.map((item) => (
+                <PostCard key={item.id || item._id} post={item} />
+              ))
+            ) : (
+              <h4 className="body-2 text-zinc-700/50 min-h-[7rem] w-full text-center font-semibold">
+                No posts found
+              </h4>
+            )
+          ) : (
+            <FeedsSkeleton />
+          )}
+        </div>
       </div>
     </>
   );

@@ -1,12 +1,11 @@
-import { useContext, useLayoutEffect, useState } from 'react';
-import { AppContext } from '../App';
+import { useContext, useState } from 'react';
 import { userSvg } from '../assets';
 import { postIcons } from './constants';
 import Button from './design/Button';
 import Loader from './skeletons/Loader';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import axiosInstance from '../features/utils/axiosInstance';
+import { AppContext } from './AppContext';
 
 const WhatInYourMind = ({ className }) => {
   const navigate = useNavigate();

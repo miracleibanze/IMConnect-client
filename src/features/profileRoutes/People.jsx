@@ -1,25 +1,29 @@
-import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import PersonCard from '../../components/design/PersonCard';
-import Loader from '../../components/skeletons/Loader';
-import { AppContext } from '../../App';
+import ListSkeleton from '../../components/skeletons/ListSkeleton';
 import { angleDownSvg } from '../../assets';
 import axiosInstance from '../utils/axiosInstance';
+import WelcomeSkeleton from '../../components/skeletons/WelcomeSkeleton';
+import { AppContext } from '../../components/AppContext';
 
 const People = () => {
   const [friends, setFriends] = useState();
   const [nonFriends, setNonFriends] = useState();
-  const [loadingnonFriends, setloadingNonFriends] = useState(false);
+  const [loadingnonFriends, setloadingNonFriends] = useState(true);
   const [viewMyFriends, setViewMyFriends] = useState(false);
   const context = useContext(AppContext);
-  if (!context) return <Loader />;
+  if (!context) return <WelcomeSkeleton />;
   const { user } = context;
 
   useEffect(() => {
+    if (!user) return; // Only trigger the fetch if user is available
+
     const handlePeople = async () => {
       setloadingNonFriends(true);
       try {
+        console.log(user.username); // Ensure that user.username exists
         const response = await axiosInstance.get(`/users/${user.username}`);
+        console.log(response);
         setFriends(response.data.friends);
         setNonFriends(response.data.nonFriends);
       } catch (error) {
@@ -30,7 +34,7 @@ const People = () => {
     };
 
     handlePeople();
-  }, []);
+  }, [user]); // Dependency array makes sure this runs when user changes
 
   const sendFriendRequest = async (userId) => {
     try {
@@ -98,7 +102,7 @@ const People = () => {
             )}
           </>
         ) : (
-          <Loader />
+          <ListSkeleton />
         )}
       </div>
     </div>

@@ -17,14 +17,14 @@ import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
 import Loader from '../../components/skeletons/Loader.jsx';
 import Sidebar2 from '../../components/Sidebar2';
-import { AppContext } from '../../App';
-import { useWrappedState } from '../../components/useWrappedState.jsx';
 import WelcomeSkeleton from '../../components/skeletons/WelcomeSkeleton.jsx';
+import useWrappedState from '../../components/useWrappedState.jsx';
+import { AppContext } from '../../components/AppContext.jsx';
 
 const Hero = lazy(() => import('../../components/Hero.jsx'));
 const CreatePost = lazy(() => import('../../components/CreatePost.jsx'));
 const AllMessages = lazy(() => import('../messageRoutes/AllMessages.jsx'));
-const MyFriends = lazy(() => import('../messageRoutes/MyFriends.jsx'));
+const MyFriends = lazy(() => import('../messageRoutes/OneChat.jsx'));
 const People = lazy(() => import('../profileRoutes/People.jsx'));
 const Person = lazy(() => import('../profileRoutes/Person.jsx'));
 const Photos = lazy(() => import('../profileRoutes/Photos.jsx'));
@@ -36,7 +36,7 @@ const ProfileSetting = lazy(
 export const context = createContext();
 
 const Welcome = () => {
-  const location = useLocation().pathname;
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const { wrapped, setWrapped, searchBox, setSearchBox } = useWrappedState();
   const [people, setPeople] = useState();
@@ -44,8 +44,19 @@ const Welcome = () => {
   const appContext = useContext(AppContext);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!appContext) {
+        alert('Session expired or context unavailable.');
+        navigate('/login');
+      }
+    }, 12000);
+
+    return () => clearTimeout(timer);
+  }, [appContext, pathname]);
+
+  useEffect(() => {
     const handleResize = () => setWrapped(window.innerWidth <= 640);
-    handleResize(); // Set initial state on mount
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {

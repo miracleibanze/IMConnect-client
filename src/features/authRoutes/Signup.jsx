@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/design/Button';
 import { useContext, useState } from 'react';
-import { AppContext } from '../../App';
 import {
   checkSvg,
   editSvg,
@@ -12,6 +11,7 @@ import {
 } from '../../assets';
 import axiosInstance from '../utils/axiosInstance';
 import Loader from '../../components/skeletons/Loader';
+import { AppContext } from '../../components/AppContext';
 
 const Signup = () => {
   const navigate = useNavigate();
