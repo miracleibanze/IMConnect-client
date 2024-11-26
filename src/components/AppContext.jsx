@@ -38,9 +38,15 @@ const AppContextProvider = ({ children }) => {
     authenticateUser();
   }, [savedSession]);
 
+  const usePageTitle = (title) => {
+    useEffect(() => {
+      document.title = title || 'IMConnect';
+    }, [title]);
+  };
+
   return (
     <AppContext.Provider
-      value={{ user, setUser, isLogged, setIsLogged, isLoading }}
+      value={{ user, setUser, isLogged, setIsLogged, isLoading, usePageTitle }}
     >
       {children}
     </AppContext.Provider>

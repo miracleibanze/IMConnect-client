@@ -15,7 +15,8 @@ const People = () => {
   const [requests, setRequests] = useState();
   const context = useContext(AppContext);
   if (!context) return <WelcomeSkeleton />;
-  const { user } = context;
+  const { user, usePageTitle } = context;
+  usePageTitle('People | IMConnect');
 
   useEffect(() => {
     if (!user) return; // Only trigger the fetch if user is available

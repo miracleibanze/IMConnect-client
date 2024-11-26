@@ -9,7 +9,8 @@ const MessageComponent = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
   if (!context) return <ListSkeleton message />;
-  const { user } = context;
+  const { user, usePageTitle } = context;
+  usePageTitle('Messages | IMConnect');
   const [friends, setfriends] = useState([]);
   const [loading, setloading] = useState(true);
 

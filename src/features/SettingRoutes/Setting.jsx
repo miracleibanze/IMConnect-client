@@ -15,7 +15,8 @@ const Setting = () => {
     return <Loader />;
   }
 
-  const { user } = context;
+  const { user, usePageTitle } = context;
+  usePageTitle('Setting | IMConnect');
   const [deleteAccountPrompt, setDeleteAccountPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
 

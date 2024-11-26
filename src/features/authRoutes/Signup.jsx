@@ -20,8 +20,8 @@ const Signup = () => {
   });
   const context = useContext(AppContext);
   if (!context) return <Loader />;
-  const { setUser, user, setIsLogged } = context;
-
+  const { setUser, user, setIsLogged, usePageTitle } = context;
+  usePageTitle('Sign Up | IMConnect');
   const [registerPage, setRegisterPage] = useState(0);
 
   const [waitResult, setWaitResult] = useState(false);

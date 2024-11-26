@@ -1,7 +1,11 @@
-import { publicBg } from "../assets";
-import Button from "./design/Button";
+import { useContext } from 'react';
+import { publicBg } from '../assets';
+import Button from './design/Button';
+import { AppContext } from './AppContext';
 
 const Public = () => {
+  const { usePageTitle } = useContext(AppContext);
+  usePageTitle('IMConnect | Welcome page');
   const welcome = (
     <div className="sm:min-h-full max-h-max border-b border-blue-300 sm:max-w-[25rem] text-black w-full bg-zinc-200 p-5 flex flex-col justify-center gap-4 py-16">
       <h2 className="h2 font-semibold text-center">
@@ -16,7 +20,7 @@ const Public = () => {
         wFull
         href="/auth/signup"
         onClick={() => {
-          sessionStorage.clear("userSession");
+          sessionStorage.clear('userSession');
         }}
       >
         Sign up

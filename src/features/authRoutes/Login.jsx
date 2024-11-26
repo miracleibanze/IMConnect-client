@@ -7,7 +7,8 @@ import { AppContext } from '../../components/AppContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUser, setIsLogged } = useContext(AppContext);
+  const { setUser, setIsLogged, usePageTitle } = useContext(AppContext);
+  usePageTitle('Login | IMConnect');
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [errorMessage, setErrorMessage] = useState();
