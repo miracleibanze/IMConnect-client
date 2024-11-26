@@ -61,7 +61,7 @@ const PostCard = ({ post, className }) => {
   return (
     <div
       className={`h-max flex flex-col gap-2 py-4 my-4 px-4 rounded-md ${
-        className || 'bg-zinc-100'
+        className ? className : 'bg-zinc-100'
       }`}
     >
       <div className="flex justify-between items-center border-b border-zinc-400/20 pb-2">

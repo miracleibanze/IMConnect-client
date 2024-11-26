@@ -14,11 +14,11 @@ const Notice = ({ message, onClose = () => {}, duration = 3000 }) => {
   return (
     message !== '' && (
       <div
-        className={`fixed bottom-5 right-0 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transition-transform duration-500 ease-in-out transform translate-x-full ${
+        className={`fixed bottom-5 right-0 bg-green-500 text-white z-[9999] px-4 py-2 rounded-lg shadow-lg transition-transform duration-500 ease-in-out transform ${
           message ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {message}
+        ❗ {message}
       </div>
     )
   );

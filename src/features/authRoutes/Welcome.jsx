@@ -15,11 +15,12 @@ import {
 } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
-import Loader from '../../components/skeletons/Loader.jsx';
 import Sidebar2 from '../../components/Sidebar2';
 import WelcomeSkeleton from '../../components/skeletons/WelcomeSkeleton.jsx';
 import useWrappedState from '../../components/useWrappedState.jsx';
 import { AppContext } from '../../components/AppContext.jsx';
+import Likes from '../../components/Likes.jsx';
+import ProfileSetting from '../SettingRoutes/ProfileSetting.jsx';
 
 const Hero = lazy(() => import('../../components/Hero.jsx'));
 const CreatePost = lazy(() => import('../../components/CreatePost.jsx'));
@@ -29,9 +30,9 @@ const People = lazy(() => import('../profileRoutes/People.jsx'));
 const Person = lazy(() => import('../profileRoutes/Person.jsx'));
 const Photos = lazy(() => import('../profileRoutes/Photos.jsx'));
 const Setting = lazy(() => import('../SettingRoutes/Setting.jsx'));
-const ProfileSetting = lazy(
-  () => import('../SettingRoutes/ProfileSetting.jsx')
-);
+// const ProfileSetting = lazy(
+//   () => import('../SettingRoutes/ProfileSetting.jsx')
+// );
 
 export const context = createContext();
 
@@ -74,10 +75,10 @@ const Welcome = () => {
           setSearchBox={setSearchBox}
         />
       </div>
-      <main className="fixed right-0 left-0 bottom-0 top-[4.5rem] flex flex-col items-center">
-        <div className="h-full w-full flex justify-between relative">
+      <main className="fixed right-0 left-0 bottom-0 top-[4.5rem] pl-2 py-2 flex flex-col items-center">
+        <div className="h-full w-full flex justify-between relative gap-2">
           <div
-            className={`relative h-full flex-center-both p-2 z-[150] ${
+            className={`relative h-full flex-center-both z-[150] ${
               wrapped ? 'max-sm:hidden' : ''
             }`}
           >
@@ -88,7 +89,7 @@ const Welcome = () => {
             />
           </div>
           <div className="h-full w-full flex justify-between gap-2 overflow-y-scroll scroll-design relative">
-            <div className="w-full h-full sm:p-2 relative">
+            <div className="w-full h-full relative">
               <context.Provider
                 value={{
                   searchBox,
@@ -109,6 +110,7 @@ const Welcome = () => {
                       <Route path="post/:text" element={<CreatePost />} />
                       <Route path="search" element={<Hero />} />
                       <Route path="profile" element={<Person />} />
+                      <Route path="likes" element={<Likes />} />
                       <Route path="people">
                         <Route index element={<People />} />
                         <Route path="person/:username" element={<Person />}>

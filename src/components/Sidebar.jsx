@@ -34,7 +34,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
       <div
         className={`${
           !wrapped
-            ? 'w-[12rem] max-sm:absolute left-2 top-2 bottom-2 max-sm:pl-4 z-[300] max-sm:border-r-2 max-sm:border-zinc-400'
+            ? 'w-[12rem] max-sm:absolute left-2 top-2 bottom-2 z-[300] max-sm:border-r-2 max-sm:border-zinc-400'
             : 'h-full max-w-[5rem] min-w-[5rem] '
         } bg-zinc-100 rounded-md flex-between-vert sm:h-full`}
       >
@@ -55,7 +55,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           <div className={`${wrapped ? 'w-max' : 'w-full'}`}>
             {homeSidebarLinks.map((item) => (
               <button
-                className={`w-full outline-none py-2 font-semibold sm:px-4 hover:bg-slate-300/50 flex items-center gap-2 ${
+                className={`w-full outline-none py-2 font-semibold px-4 hover:bg-slate-300/50 flex items-center gap-2 ${
                   location === item.link && 'bg-zinc-200 rounded-full'
                 } ${item.id === 1 && 'lg:hidden'} cursor-pointer`}
                 key={item.id}
@@ -83,7 +83,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           >
             {utilitySidebarLinks.map((item) => (
               <button
-                className={`w-full outline-none border-none py-2 cursor-pointer font-semibold sm:px-4 hover:bg-slate-300/50 flex items-center gap-2 ${
+                className={`w-full outline-none border-none py-2 cursor-pointer font-semibold px-4 hover:bg-slate-300/50 flex items-center gap-2 ${
                   item.id === 2 && 'bg-zinc-50 rounded-md'
                 }`}
                 key={item.id}
@@ -103,7 +103,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           <div className={`${wrapped ? 'w-max' : 'w-full'} h-1/4`}>
             {bottomSidebarLinks.map((item) => (
               <button
-                className={`cursor-pointer w-full py-2 font-semibold sm:px-4 hover:bg-slate-300/50 flex items-center gap-2  ${
+                className={`cursor-pointer w-full py-2 font-semibold px-4 hover:bg-slate-300/50 flex items-center gap-2  ${
                   location === `${item.link}` && 'bg-zinc-50 rounded-md'
                 }`}
                 key={item.id}

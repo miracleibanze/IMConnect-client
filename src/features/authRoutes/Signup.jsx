@@ -1,17 +1,11 @@
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/design/Button';
 import { useContext, useState } from 'react';
-import {
-  checkSvg,
-  editSvg,
-  eyeSlashSvg,
-  loaderSvg,
-  uploadCloud,
-} from '../../assets';
+import { checkSvg, loaderSvg, uploadCloud } from '../../assets';
 import axiosInstance from '../utils/axiosInstance';
 import Loader from '../../components/skeletons/Loader';
 import { AppContext } from '../../components/AppContext';
+import Notice from '../../components/design/Notice';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -34,6 +28,9 @@ const Signup = () => {
   const [uploadStatus, setUploadStatus] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [viewPassword, setViewPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [formattedDate, setFormattedDate] = useState('');
 
   const handleAddUser = (event) => {
     event.preventDefault();
@@ -67,6 +64,7 @@ const Signup = () => {
   };
 
   const postData = async () => {
+    setLoading(true);
     console.log(userData);
     try {
       const response = await axiosInstance.post('/users', userData);
@@ -75,14 +73,30 @@ const Signup = () => {
       setIsLogged(true);
       navigate('/dash');
     } catch (error) {
+      setError(error?.response?.data?.message || error?.message);
+      console.log(error?.response?.data?.message || error?.message);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   const handleSubmit = () => {
     postData();
   };
+
+  const handleDateChange = (e) => {
+    const rawDate = e.target.value; // yyyy-mm-dd
+    if (rawDate) {
+      const [year, month, day] = rawDate.split('-');
+      setFormattedDate(`${day}/${month}/${year}`); // dd/mm/yyyy
+    } else {
+      setFormattedDate(''); // Reset if input is cleared
+    }
+  };
+
   return (
-    <div className="w-full shadow-2xl shadow-black flex flex-col gap-4 px-8 py-12 max-w-md bg-zinc-50">
+    <div className="w-full relative shadow-2xl shadow-black flex flex-col gap-4 px-8 py-12 max-w-md bg-zinc-50">
+      <Notice message={error} onCancel={() => setError('')} />
       <form className="form w-full flex flex-col gap-4 bg-zinc-50 relative">
         <h3 className="h3 text-center font-semibold">Create account</h3>
         {registerPage === 0 && (
@@ -126,7 +140,12 @@ const Signup = () => {
           <>
             <label htmlFor="dob" className="body-2 font-semibold">
               <span className="text-zinc-500">Your birth date</span>
-              <input type="date" name="dob" onChange={handleAddUser} />
+              <input
+                type="date"
+                name="dob"
+                onChange={handleDateChange}
+                className="block mt-2"
+              />
             </label>
             <label htmlFor="gender" className="body-2 font-semibold">
               <span className="text-zinc-500">Gender</span>
@@ -259,6 +278,11 @@ const Signup = () => {
       <Button light className="text-blue-700 mt-4" href="/auth/login">
         Already have an account
       </Button>
+      {loading && (
+        <div className="absolute inset-0 flex-center-both opacity-[.4] z-[1000] bg-zinc-100">
+          <img src={loaderSvg} className="w-12 h-12" />
+        </div>
+      )}
     </div>
   );
 };

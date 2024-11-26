@@ -50,64 +50,98 @@ const Setting = () => {
         onClick={() => navigate(-1)}
       />
       <h3 className="h3 font-semibold">Setting</h3>
-
       {/* Settings Links */}
       <div className="flex-center-both w-full max-w-lg">
-        <a
-          href="/dash/setting/profile"
+        <span
+          onClick={() => navigate('/dash/setting/profile')}
           className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
         >
           Personal Information
-        </a>
-        <a
-          href="/dash/setting/account"
+        </span>
+        <span
+          onClick={() => navigate('/dash/setting/account')}
           className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
         >
           Account Setting
-        </a>
-        <a
-          href="/dash/setting/notifications"
+        </span>
+        <span
+          onClick={() => navigate('/dash/setting/notifications')}
           className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
         >
           Notification Preferences
-        </a>
-        <a
-          href="/dash/setting/messaging"
+        </span>
+        <span
+          onClick={() => navigate('/dash/setting/messaging')}
           className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
         >
           Messaging Setting
-        </a>
-        <a
-          href="/dash/setting/info"
+        </span>
+        <span
+          onClick={() => navigate('/dash/setting/info')}
           className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
         >
           Notification Information
-        </a>
-        <a
-          href="/dash/setting/help"
+        </span>
+        <span
+          onClick={() => navigate('/dash/setting/help')}
           className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
         >
           Help & Support
-        </a>
+        </span>
       </div>
-
       {/* About Section */}
       <h3 className="h3 font-semibold mt-12">About</h3>
-      <p className="body-1 font-normal">
-        Welcome to our platform, a dynamic space built for real-time interaction
-        and community connection. Leveraging cutting-edge technologies like the
-        MERN stack and Socket.io, our website empowers users to:
-      </p>
-      <p className="body-1">
-        Share their thoughts through posts. Engage with others by exploring
-        shared content. Connect in real-time with seamless messaging features.
-        Whether you're here to express yourself, explore perspectives, or simply
-        have meaningful conversations, our mission is to make every interaction
-        instant, enjoyable, and impactful. Thank you for being part of our
-        growing community!
-      </p>
-
-      {/* Danger Zone */}
+      <div className="relative about">
+        <i>
+          Hello, and welcome to **IMConnect**, your new go-to platform for
+          real-time messaging and social posting! We're thrilled to have you
+          here as one of our first visitors. Together, we’ll shape this
+          community into something truly amazing.
+        </i>
+        <p className="font-bold h5 mt-12">
+          Here’s what you can do on IMConnect:
+        </p>
+        <p className="h5 mt-6 font-semibold">1. Real-Time Messaging</p>
+        <i>
+          Chat instantly with friends and contacts. Start a conversation,
+          connect with others, and enjoy seamless communication with no delays.
+        </i>
+        <i>
+          Head over to the **Messages** section to start a new chat or select an
+          existing contact to begin.
+        </i>
+        <p className="h5 mt-6 font-semibold">2. Create Posts</p>
+        <i>
+          Express yourself by sharing updates, thoughts, or announcements.
+          Whether it's a short message or a big idea, the **Post** section is
+          your space to share.
+        </i>
+        <i>
+          You can also interact with others by liking and commenting on their
+          posts.
+        </i>
+        <p className="h5 mt-6 font-semibold">3. Engage with Others</p>
+        <i>
+          Discover and interact with posts from the community. Like, comment,
+          and expand your network while building connections with others.
+        </i>
+        <p className="h5 mt-6 font-semibold">4. Send Feedback</p>
+        <i>
+          Your feedback matters! Have a suggestion, noticed an issue, or simply
+          want to say hello? Use the **Message** feature to reach out directly
+          to me.
+        </i>
+        <i>
+          We’re constantly improving IMConnect, and your input will help shape
+          its future. Together, we can make this platform truly amazing!
+        </i>
+        <i>
+          Thank you for being part of the early days of IMConnect. Dive in,
+          explore, and let us know what you think!
+        </i>
+        <p className="mt-8 h5">Warm regards,</p>
+      </div>
+      <h4 className="h4 italic">IBANZE Miracle</h4>
       <div className="w-full p-4 mt-16 border border-[#ff0000] rounded-2xl relative pt-8">
         <h5 className="h5 font-normal text-[#ff0000] absolute top-0 -translate-y-[60%] bg-zinc-50 px-3 left-6">
           Danger Zone
@@ -120,7 +154,6 @@ const Setting = () => {
           Delete account
         </Button>
       </div>
-
       {/* Delete Account Prompt Overlay */}
       {deleteAccountPrompt && (
         <DeleteModal

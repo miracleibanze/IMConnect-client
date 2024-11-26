@@ -11,6 +11,8 @@ const People = () => {
   const [nonFriends, setNonFriends] = useState();
   const [loadingnonFriends, setloadingNonFriends] = useState(true);
   const [viewMyFriends, setViewMyFriends] = useState(false);
+  const [viewRequests, setViewRequests] = useState(false);
+  const [requests, setRequests] = useState();
   const context = useContext(AppContext);
   if (!context) return <WelcomeSkeleton />;
   const { user } = context;
@@ -32,8 +34,19 @@ const People = () => {
         setloadingNonFriends(false);
       }
     };
+    const handleRequest = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/users/confirm-request/${user._id}`
+        );
+        setRequests(response.data);
+      } catch (error) {
+        console.log('Error fetching feeds:', error);
+      }
+    };
 
     handlePeople();
+    handleRequest();
   }, [user]); // Dependency array makes sure this runs when user changes
 
   const sendFriendRequest = async (userId) => {
@@ -51,26 +64,72 @@ const People = () => {
 
   return (
     <div className="h-full min-h-max bg-zinc-100 rounded-md w-full p-4 relative">
-      <h4
-        className="h4 w-full mb-4 font-semibold px-4 flex-between-hor hover:bg-zinc-200 duration-150 py-2 rounded-md"
-        onClick={() => setViewMyFriends(!viewMyFriends)}
+      <h5
+        className="h5 w-full mb-4 font-semibold px-4 flex-between-hor hover:bg-zinc-200 duration-150 py-2 rounded-md"
+        onClick={() => setViewRequests(!viewRequests)}
       >
-        <span>Friends&nbsp;({friends?.length || 0}) </span>
+        <span className="flex items-center">
+          Friend Requests&nbsp;
+          {loadingnonFriends ? (
+            <div className="w-16 h-10 rounded-md b-zinc-200 skeleton-loader" />
+          ) : (
+            `(${requests?.length || 0})`
+          )}
+        </span>
         <img
           src={angleDownSvg}
           className={`w-6 h-6 ${viewMyFriends && 'rotate-180'}`}
         />
-      </h4>
+      </h5>
+      {viewRequests && (
+        <div className="relative">
+          {requests?.length > 0 ? (
+            <>
+              {requests.map((person) => (
+                <PersonCard
+                  key={person._id}
+                  person={person}
+                  requests
+                  userId={user._id}
+                  className="hover:bg-zinc-200/50"
+                />
+              ))}
+            </>
+          ) : (
+            <div className="w-full py-4 flex-center-both text-zinc-700/50 font-semibold body-1">
+              No friends requests yet
+            </div>
+          )}
+        </div>
+      )}
+      <h5
+        className="h5 w-full mb-4 font-semibold px-4 flex-between-hor hover:bg-zinc-200 duration-150 py-2 rounded-md"
+        onClick={() => setViewMyFriends(!viewMyFriends)}
+      >
+        <span className="flex items-center">
+          Friends&nbsp;
+          {loadingnonFriends ? (
+            <div className="w-16 h-10 rounded-md b-zinc-200 skeleton-loader" />
+          ) : (
+            `(${friends?.length || 0})`
+          )}
+        </span>
+        <img
+          src={angleDownSvg}
+          className={`w-6 h-6 ${viewMyFriends && 'rotate-180'}`}
+        />
+      </h5>
       <div className="relative">
         {viewMyFriends && (
           <>
             {friends?.length > 0 ? (
               <>
-                {friends.map((user) => (
+                {friends.map((person) => (
                   <PersonCard
-                    key={user._id}
+                    key={[person]._id}
                     friends
-                    person={user}
+                    person={person}
+                    userId={user._id}
                     className="hover:bg-zinc-200/50"
                   />
                 ))}
@@ -83,15 +142,16 @@ const People = () => {
           </>
         )}
       </div>
-      <h4 className="h4 w-full mb-4 font-semibold px-4">People you may know</h4>
+      <h5 className="h5 w-full mb-4 font-semibold px-4">People you may know</h5>
       <div className="relative h-4/5">
         {!loadingnonFriends ? (
           <>
             {nonFriends?.length > 0 ? (
-              nonFriends.map((user) => (
+              nonFriends.map((person) => (
                 <PersonCard
-                  key={user._id}
-                  person={user}
+                  key={person._id}
+                  person={person}
+                  userId={user._id}
                   className="hover:bg-zinc-200/50"
                 />
               ))

@@ -173,4 +173,8 @@ select {
       transform: translateX(100%);
     }
   }
+  .about i {
+    display: block;
+    padding: 0 2rem;
+  }
 }

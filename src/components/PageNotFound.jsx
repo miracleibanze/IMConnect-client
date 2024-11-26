@@ -1,6 +1,6 @@
-import { memo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Button from "./design/Button";
+import { memo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Button from './design/Button';
 
 const PageNotFound = ({ error, onRetry }) => {
   const location = useLocation();
@@ -8,7 +8,7 @@ const PageNotFound = ({ error, onRetry }) => {
   return (
     <div className="flex-center-both flex-1 h-full bg-zinc-50 absolute inset-0">
       <h4 className="h4 font-normal">
-        400 {error ? error : "Page not found."}
+        400 {error ? error : 'Page not found.'}
       </h4>
       {Error ? (
         <p className="font-normal">

@@ -12,56 +12,57 @@ import {
   smileSvg,
   thumbsUpSvg,
   usersSvg,
-} from "../assets";
+} from '../assets';
 
 export const navbarIcons = [
   {
     id: 0,
     icon: commentsSvg,
-    link: "/dash/profile/comments",
+    link: '/dash/profile/comments',
   },
   {
     id: 1,
     icon: bellSvg,
-    link: "/dash/profile/notification",
+    link: '/dash/profile/notification',
   },
 ];
 
 export const homeSidebarLinks = [
   {
     id: 0,
-    name: "Home",
+    name: 'Home',
     icon: homeSvg,
-    link: "/dash",
+    link: '/dash',
   },
   {
     id: 1,
-    name: "Explore",
+    name: 'Explore',
     icon: searchSvg,
   },
   {
     id: 2,
-    name: "Inbox",
+    name: 'Inbox',
     icon: envelopeSvg,
-    link: "/dash/messages",
+    link: '/dash/messages',
   },
   {
     id: 3,
-    name: "People",
+    name: 'People',
     icon: usersSvg,
-    link: "/dash/people",
+    link: '/dash/people',
   },
 ];
 export const utilitySidebarLinks = [
   {
     id: 0,
-    name: "Create Post",
-    link: "/dash/post",
+    name: 'Create Post',
+    link: '/dash/post',
     icon: plusSquareSvg,
   },
   {
     id: 1,
-    name: "Likes",
+    name: 'Likes',
+    link: '/dash/likes',
     icon: thumbsUpSvg,
   },
 ];
@@ -69,13 +70,13 @@ export const utilitySidebarLinks = [
 export const bottomSidebarLinks = [
   {
     id: 0,
-    name: "Setting",
-    link: "/dash/setting",
+    name: 'Setting',
+    link: '/dash/setting',
     icon: gearFillSvg,
   },
   {
     id: 1,
-    name: "Log Out",
+    name: 'Log Out',
     icon: arrowRightOnRectangleSvg,
     logOut: true,
   },
@@ -84,13 +85,13 @@ export const bottomSidebarLinks = [
 export const postIcons = [
   {
     id: 0,
-    name: "image",
+    name: 'image',
     icon: imageSvg,
   },
   {
     id: 2,
-    name: "feeling",
+    name: 'feeling',
     icon: smileSvg,
   },
 ];
-export const postFeeling = ["Happy", "Sad", "Excited", "Anxiety", "Sick"];
+export const postFeeling = ['Happy', 'Sad', 'Excited', 'Anxiety', 'Sick'];
