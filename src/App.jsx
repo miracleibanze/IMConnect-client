@@ -12,8 +12,8 @@ import Register from './features/authRoutes/Register.jsx'; // Non-lazy import
 import Public from './components/Public.jsx'; // Non-lazy import
 import WelcomeSkeleton from './components/skeletons/WelcomeSkeleton.jsx';
 import { AppContext } from './components/AppContext.jsx';
-import { connectSocket } from './features/utils/socket.js';
 import Notice from './components/design/Notice.jsx';
+import { connectSocket } from './features/utils/socket.js';
 
 const Welcome = lazy(() => import('./features/authRoutes/Welcome.jsx'));
 
