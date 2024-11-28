@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import ListSkeleton from '../../components/skeletons/ListSkeleton';
 import { AppContext } from '../../components/AppContext';
-import { connectSocket, getSocket } from '../utils/socket'; // Import connectSocket and getSocket
+import { connectSocket, getSocket } from '../utils/Socket'; // Import connectSocket and getSocket
 
 const MessageComponent = () => {
   const navigate = useNavigate();

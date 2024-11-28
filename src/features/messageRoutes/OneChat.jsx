@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/design/Button';
 import { arrowSvg, sendSvg, threeDotsVerticalSvg, userSvg } from '../../assets';
-import { connectSocket } from '../utils/socket';
+import { connectSocket } from '../utils/Socket';
 import Loader from '../../components/skeletons/Loader';
 import axiosInstance from '../utils/axiosInstance';
 import Notice from '../../components/design/Notice';
