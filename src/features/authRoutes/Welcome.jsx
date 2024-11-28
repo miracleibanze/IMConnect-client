@@ -21,6 +21,7 @@ import useWrappedState from '../../components/useWrappedState.jsx';
 import { AppContext } from '../../components/AppContext.jsx';
 import Likes from '../../components/Likes.jsx';
 import ProfileSetting from '../SettingRoutes/ProfileSetting.jsx';
+import OutletContainer from '../../components/Outlet.jsx';
 
 const Hero = lazy(() => import('../../components/Hero.jsx'));
 const CreatePost = lazy(() => import('../../components/CreatePost.jsx'));
@@ -111,13 +112,13 @@ const Welcome = () => {
                       <Route path="search" element={<Hero />} />
                       <Route path="profile" element={<Person />} />
                       <Route path="likes" element={<Likes />} />
-                      <Route path="people">
+                      <Route path="people" element={<Outlet />}>
                         <Route index element={<People />} />
                         <Route path="person/:username" element={<Person />}>
                           <Route index element={<Photos />} />
                         </Route>
                       </Route>
-                      <Route path="setting">
+                      <Route path="setting" element={<Outlet />}>
                         <Route index element={<Setting />} />
                         <Route path="profile" element={<ProfileSetting />} />
                       </Route>

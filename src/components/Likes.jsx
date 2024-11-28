@@ -42,12 +42,12 @@ const Likes = () => {
       </h5>
       <div className="relative h-full min-h-max w-full flex">
         {loading && <ListSkeleton />}
-        {posts.length === 0 ? (
+        {posts.length > 0 ? (
+          posts.map((post) => <PostCard post={post} />)
+        ) : (
           <p className="h-max w-full rounded-md flex-center-both text-zinc-700/70 font-semibold body-1">
             You don't have post yet.
           </p>
-        ) : (
-          posts.map((post) => <PostCard post={post} />)
         )}
       </div>
     </div>

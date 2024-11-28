@@ -43,7 +43,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           className={` bg-zinc-200 p-1 ${
             wrapped
               ? 'w-8 h-8 mx-auto mt-4'
-              : 'w-6 rounded-tr-md h-6 absolute max-sm:hidden sm:top-4 sm:right-4 top-2 right-2'
+              : 'w-6 rounded-tr-md h-6 mb-7 absolute max-sm:hidden sm:top-4 sm:right-4 top-2 right-2'
           }`}
           onClick={toggleWrapped}
         />

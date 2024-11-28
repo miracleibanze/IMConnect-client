@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/design/Button';
 import { arrowSvg, sendSvg, threeDotsVerticalSvg, userSvg } from '../../assets';
-import { connectSocket } from '../utils/Socket';
+import { connectSocket } from '../utils/socket';
 import Loader from '../../components/skeletons/Loader';
 import axiosInstance from '../utils/axiosInstance';
 import Notice from '../../components/design/Notice';
@@ -32,7 +32,7 @@ const MyFriends = () => {
         (newMessage.senderId === user._id &&
           newMessage.receiverId === otherUserId)
       ) {
-        setMessages((prevMessages) => [newMessage.message, ...prevMessages]);
+        setMessages((prevMessages) => [newMessage, ...prevMessages]);
       }
     });
 
@@ -112,8 +112,8 @@ const MyFriends = () => {
   const markMessagesAsRead = async () => {
     try {
       await axiosInstance.post('/messages/markAsRead', {
-        senderId: user._id,
-        receiverId: otherUserId,
+        senderId: user._id, // Current user
+        receiverId: otherUserId, // Chat partner
       });
     } catch (error) {
       console.error('Error marking messages as read:', error);

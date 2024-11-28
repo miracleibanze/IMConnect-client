@@ -1,9 +1,12 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from './design/Button';
 
 const PageNotFound = ({ error, onRetry }) => {
   const location = useLocation();
+  useEffect(() => {
+    alert(location.pathname);
+  }, []);
   const navigate = useNavigate();
   return (
     <div className="flex-center-both flex-1 h-full bg-zinc-50 absolute inset-0">

@@ -4,7 +4,7 @@ import axiosInstance from '../features/utils/axiosInstance.js';
 export const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const savedSession = JSON.parse(sessionStorage.getItem('userSession'));

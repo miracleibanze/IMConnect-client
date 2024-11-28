@@ -102,40 +102,40 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
             Decline
           </Button>
         )}
+
+        {requests && (
+          <Button border rounded light onClick={acceptRequest}>
+            Confirm
+          </Button>
+        )}
         <Button
-          blue={!requests ? !isFriend && !isRequestSent : false}
-          border={!requests ? isRequestSent || isFriend : true}
-          rounded={!requests ? isRequestSent || isFriend : true}
-          light={!requests ? isRequestSent || isFriend : true}
+          blue={!isFriend && !isRequestSent}
+          border={isRequestSent || isFriend}
+          rounded={isRequestSent || isFriend}
+          light={isRequestSent || isFriend}
           onClick={
-            !requests
-              ? isRequestSent
-                ? isFriend
-                  ? null
-                  : toggleRequest
-                : sendFriendRequest
-              : acceptRequest
+            isRequestSent
+              ? isFriend
+                ? null
+                : toggleRequest
+              : sendFriendRequest
           }
           href={isFriend ? `/dash/message/to/${person._id}` : null}
           className={isFriend && 'p-1'}
         >
-          {!requests ? (
-            <>
-              {isRequestSent ? (
-                isFriend ? (
-                  <img src={chatDotsSvg} className="w-6 h-6 hover:h-8" />
-                ) : (
-                  'Request Sent'
-                )
-              ) : isFriend ? (
-                <img src={chatDotsSvg} className="w-7 h-7" />
+          <>
+            {isRequestSent ? (
+              isFriend ? (
+                <img src={chatDotsSvg} className="w-6 h-6 hover:h-8" />
               ) : (
-                'Add Friend'
-              )}
-            </>
-          ) : (
-            <>{confirmed ? 'message' : 'confirm'}</>
-          )}
+                'Request Sent'
+              )
+            ) : isFriend ? (
+              <img src={chatDotsSvg} className="w-7 h-7" />
+            ) : (
+              'Add Friend'
+            )}
+          </>
         </Button>
       </div>
     </div>

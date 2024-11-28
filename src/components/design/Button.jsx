@@ -29,11 +29,11 @@ const Button = ({
   const spanClasses = `relative z-10 flex gap-2 items-center`;
 
   const renderButton = () => (
-    <a href={href}>
+    <div onClick={() => navigate(href)}>
       <button className={classes} onClick={onClick}>
         <span className={spanClasses}>{children}</span>
       </button>
-    </a>
+    </div>
   );
 
   return renderButton();

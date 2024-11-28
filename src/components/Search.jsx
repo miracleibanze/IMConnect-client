@@ -6,22 +6,24 @@ import Loader from './skeletons/Loader';
 const Search = (props) => {
   const { searchBox, setSearchBox } = props;
   const navigate = useNavigate();
-  const [category, setcategory] = useState('all');
+  const [category, setCategory] = useState('all');
+  const [search, setSearch] = useState('');
 
-  const [search, setSearch] = useState(undefined);
-  const heandleInputChange = (event) => {
+  const handleInputChange = (event) => {
     setSearch(event.target.value);
   };
-  const toggleSearchBox = useCallback(() => setSearchBox(!searchBox), []);
+
+  const toggleSearchBox = useCallback(() => {
+    setSearchBox((prevSearchBox) => !prevSearchBox); // Ensure toggling the correct state
+  }, [setSearchBox]);
 
   const handleCategory = (event) => {
-    setcategory(event.target.value);
-    console.log(event.target.value);
+    setCategory(event.target.value);
   };
 
   const handleSearch = async (event) => {
     if (window.innerWidth < 1024 && !search) {
-      toggleSearchBox();
+      toggleSearchBox(); // First toggle the search box
       return;
     }
     if (!search) {
@@ -36,13 +38,13 @@ const Search = (props) => {
         navigate(`/dash/search?text=${search}`);
       } else if (category === 'people') {
         navigate(`/dash/search?name=${search}`);
-      } else {
       }
     } catch (error) {
       console.log(error);
     }
-    setSearch('');
-    toggleSearchBox();
+
+    setSearch(''); // Clear search after navigating
+    toggleSearchBox(); // Close the search box
   };
 
   const handleKeyDown = (event) => {
@@ -76,7 +78,7 @@ const Search = (props) => {
           </h3>
           <input
             type="text"
-            onChange={heandleInputChange}
+            onChange={handleInputChange}
             value={search}
             name="search"
             placeholder="Search user or post"

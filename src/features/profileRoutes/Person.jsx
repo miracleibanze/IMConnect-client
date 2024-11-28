@@ -15,8 +15,11 @@ const Person = () => {
 
   const { username } = useParams();
   const user = context?.user;
+  const usePageTitle = context?.usePageTitle;
 
-  if (!username && !user?.username) {
+  usePageTitle('Person | IMConnect');
+
+  if (!username && !user.username) {
     return <PersonSkeleton />;
   }
 
@@ -32,7 +35,7 @@ const Person = () => {
       setLoading(true);
       try {
         const response = await axiosInstance.get(
-          `/users/one/${username || user.username}`
+          `/users/one/${username || user?.username}`
         );
         setPerson(response.data.user);
         setPosts(response.data.posts);
@@ -47,7 +50,7 @@ const Person = () => {
     };
 
     handlePeople();
-  }, [username, user?.username, pathname]); // Ensure proper dependencies
+  }, [username, user, pathname]); // Ensure proper dependencies
   return !loading ? (
     <div className="w-full h-max min-h-screen bg-zinc-100 rounded-md p-4 relative">
       <Notice message={error} onClose={() => setError('')} />
@@ -60,9 +63,8 @@ const Person = () => {
         <div className="relative w-full h-auto">
           <PersonHeader person={person} />
         </div>
-        <div className="w-full flex items-center gap-3 mt-12 active flex-wrap">
+        <div className="w-full flex relative gap-3 mt-12 active flex-wrap">
           <Button
-            wFull
             blue
             href={
               !username ? '/dash/messages' : `/dash/message/to/${person?._id}`
@@ -70,11 +72,9 @@ const Person = () => {
           >
             Messages
           </Button>
-          <Button wFull blue>
-            Photos
-          </Button>
+          <Button blue>Photos</Button>
           {!username && (
-            <Button wFull blue href="/dash/setting/profile">
+            <Button blue href="/dash/setting/profile">
               Edit profile
             </Button>
           )}
