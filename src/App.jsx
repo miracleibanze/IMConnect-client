@@ -13,7 +13,7 @@ import Public from './components/Public.jsx'; // Non-lazy import
 import WelcomeSkeleton from './components/skeletons/WelcomeSkeleton.jsx';
 import { AppContext } from './components/AppContext.jsx';
 import Notice from './components/design/Notice.jsx';
-import { connectSocket } from './features/utils/socket.js';
+import { connectSocket } from './features/utils/Socket.js';
 
 const Welcome = lazy(() => import('./features/authRoutes/Welcome.jsx'));
 
