@@ -80,7 +80,7 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
 
   return (
     <div
-      className={`px-6 py-2 w-full flex-between-hor gap-5 ${className && className}`}
+      className={`px-6 py-2 w-full h-max relative flex-between-hor gap-5 ${className && className}`}
     >
       <Notice message={notice} onClose={() => setNotice('')} />
       <img

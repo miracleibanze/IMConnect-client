@@ -72,7 +72,7 @@ const Feeds = () => {
           <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
             People
           </h4>
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-max">
             {!loading ? (
               people.length > 0 ? (
                 people.map((item) => (
