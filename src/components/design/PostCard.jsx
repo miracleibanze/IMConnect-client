@@ -60,7 +60,7 @@ const PostCard = ({ post, className }) => {
 
   return (
     <div
-      className={`h-full flex flex-col py-4 px-4 rounded-md ${
+      className={`h-max flex flex-col py-4 px-4 rounded-md ${
         className ? className : 'bg-zinc-100'
       }`}
     >
@@ -101,7 +101,7 @@ const PostCard = ({ post, className }) => {
         ))}
       </div>
 
-      <div className="flex justify-between w-full gap-2 pb-4">
+      <div className="flex justify-between h-max gap-2 pb-4">
         {Array.isArray(post.images) &&
           post.images.map((item, index) => (
             <div
@@ -115,7 +115,7 @@ const PostCard = ({ post, className }) => {
               <img
                 loading="lazy"
                 src={item}
-                className="h-full object-cover z-[100] object-center"
+                className="object-cover z-[100] object-center"
               />
             </div>
           ))}
