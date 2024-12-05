@@ -60,7 +60,7 @@ const Feeds = () => {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <>
+    <div className="w-full min-h-screen bg-zinc-200 py-3 rounded-md">
       {(nameParam || textParam) && (
         <div className="w-full p-3 bg-zinc-200 rounded-md">
           <h2 className="h2">Results of search "{nameParam || textParam}"</h2>
@@ -68,19 +68,20 @@ const Feeds = () => {
       )}
 
       {nameParam && (
-        <div className="bg-zinc-200 py-3 rounded-md w-full h-full">
+        <div className="py-3 w-full">
           <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
             People
           </h4>
-          <div className="relative w-full h-max">
+          <div className="relative w-full h-max flex flex-col gap-2">
             {!loading ? (
               people.length > 0 ? (
                 people.map((item) => (
-                  <PersonCard
-                    key={item.id || item._id}
-                    person={item}
-                    className="hover:bg-zinc-100/70"
-                  />
+                  <div key={item._id} className="h-max relative">
+                    <PersonCard
+                      person={item}
+                      className="hover:bg-zinc-100/70"
+                    />
+                  </div>
                 ))
               ) : (
                 <div className="body-2 font-semibold text-zinc-700/50 flex-center-both min-h-[10rem]">
@@ -93,12 +94,13 @@ const Feeds = () => {
           </div>
         </div>
       )}
+
       {(location.pathname === '/dash' || textParam) && (
-        <div className="bg-zinc-200 h-full flex flex-col g-4 w-full relative">
+        <div className="w-full flex flex-col gap-4 relative">
           <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
             Posts
           </h4>
-          <div className="h-full w-full px-4">
+          <div className="w-full px-4 flex flex-col gap-4">
             {!loading ? (
               posts.length > 0 ? (
                 posts.map((item) => (
@@ -115,7 +117,7 @@ const Feeds = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
