@@ -1,29 +1,22 @@
-import { memo, useEffect } from 'react';
+import { memo, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from './design/Button';
+import { AppContext } from './AppContext';
 
 const PageNotFound = ({ error, onRetry }) => {
   const location = useLocation();
-  useEffect(() => {
-    alert(location.pathname);
-  }, []);
   const navigate = useNavigate();
+  const { usePageTitle } = useContext(AppContext);
+  usePageTitle('400 Page not Found | IMConnect');
+
   return (
     <div className="flex-center-both flex-1 h-full bg-zinc-50 absolute inset-0">
-      <h4 className="h4 font-normal">
-        400 {error ? error : 'Page not found.'}
-      </h4>
-      {Error ? (
-        <p className="font-normal">
-          this link "<u className="underline">{location.pathname}</u>" that you
-          are visiting has a problem
-        </p>
-      ) : (
-        <p className="font-normal">
-          This page you're visiting was not found on the sever.
-        </p>
-      )}
-      <p className="font-normal">Please try other pages or go back.</p>
+      <h4 className="h4 font-normal">400 {error ? error : 'Not found.'}</h4>
+
+      <p className="font-normal max-w-[20rem] text-center pb-10">
+        We didn't find what you are looking for, Please go back or reflesh that
+        page.
+      </p>
       <Button
         blue
         onClick={() => {
@@ -36,11 +29,6 @@ const PageNotFound = ({ error, onRetry }) => {
       >
         Go back
       </Button>
-      {Error && (
-        <p className="body-font-semibold">
-          If problem persists, try reloading page
-        </p>
-      )}
     </div>
   );
 };

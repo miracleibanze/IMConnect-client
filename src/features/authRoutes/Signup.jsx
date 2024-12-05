@@ -74,7 +74,7 @@ const Signup = () => {
       navigate('/dash');
     } catch (error) {
       setError(error?.response?.data?.message || error?.message);
-      console.log(error?.response?.data?.message || error?.message);
+      setRegisterPage(0);
       console.log(error);
     } finally {
       setLoading(false);
@@ -85,13 +85,36 @@ const Signup = () => {
   };
 
   const handleDateChange = (e) => {
-    const rawDate = e.target.value; // yyyy-mm-dd
+    const rawDate = e.target.value;
+
     if (rawDate) {
       const [year, month, day] = rawDate.split('-');
-      setFormattedDate(`${day}/${month}/${year}`); // dd/mm/yyyy
+      const selectedDate = new Date(rawDate);
+      const maxDate = new Date(new Date().getFullYear() - 2, 11, 31); // Dec 31, 2 years ago
+      const minDate = new Date(1900, 0, 1); // Jan 1, 1900
+
+      if (selectedDate > maxDate || selectedDate < minDate) {
+        alert('Please select a valid birth date!');
+        e.target.value = ''; // Clear the invalid input
+        setFormattedDate(''); // Clear formatted date
+        return;
+      }
+
+      setFormattedDate(`${day}/${month}/${year}`); // Format and set the valid date
     } else {
-      setFormattedDate(''); // Reset if input is cleared
+      setFormattedDate(''); // Clear formatted date if no input
     }
+  };
+
+  const getValidMaxDate = () => {
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 2, 11, 31);
+    return maxDate.toISOString().split('T')[0];
+  };
+
+  const getValidMinDate = () => {
+    const minDate = new Date(1900, 0, 1);
+    return minDate.toISOString().split('T')[0];
   };
 
   return (
@@ -143,10 +166,14 @@ const Signup = () => {
               <input
                 type="date"
                 name="dob"
+                id="dob"
                 onChange={handleDateChange}
                 className="block mt-2"
+                max={getValidMaxDate()}
+                min={getValidMinDate()}
               />
             </label>
+
             <label htmlFor="gender" className="body-2 font-semibold">
               <span className="text-zinc-500">Gender</span>
 

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../../components/skeletons/Loader';
-import { arrowSvg, editSvg, userSvg } from '../../assets';
+import { angleDownSvg, arrowSvg, editSvg, userSvg } from '../../assets';
 import Button from '../../components/design/Button';
 import axiosInstance from '../utils/axiosInstance';
 import Notice from '../../components/design/Notice';
@@ -10,17 +10,16 @@ import { AppContext } from '../../components/AppContext';
 const ProfileSetting = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
+  const { user, usePageTitle } = context;
+  usePageTitle && usePageTitle('Personal information | IMConnect');
 
-  if (!context) return <Loader />;
-
-  const { user } = context;
+  if (!context || !context?.user) return <Loader />;
 
   const [imagePreview, setImagePreview] = useState(null);
   const [notify, setNotify] = useState('');
 
   const [names, setnames] = useState('');
   const [username, setUsername] = useState('');
-  const [password, setpassword] = useState('');
   const [email, setemail] = useState('');
 
   const cover = sessionStorage.getItem('coverImage');
@@ -28,7 +27,7 @@ const ProfileSetting = () => {
   const changeName = async () => {
     try {
       const response = await axiosInstance.patch('/users', {
-        id: user._id,
+        id: user?._id,
         names,
       });
       console.log(response.data);
@@ -47,7 +46,7 @@ const ProfileSetting = () => {
       reader.onloadend = async () => {
         const result = reader.result;
         const response = await axiosInstance.patch('/users', {
-          id: user._id,
+          id: user?._id,
           image: result,
         });
         setNotify(response.data);
@@ -64,7 +63,7 @@ const ProfileSetting = () => {
       reader.onloadend = async () => {
         const result = reader.result;
         const response = await axiosInstance.patch('/users', {
-          id: user._id,
+          id: user?._id,
           cover: result,
         });
         setNotify(response.data);
@@ -75,7 +74,7 @@ const ProfileSetting = () => {
   const changeusername = async () => {
     try {
       const response = await axiosInstance.patch('/users', {
-        id: user._id,
+        id: user?._id,
         username,
       });
       console.log(response.data);
@@ -89,22 +88,8 @@ const ProfileSetting = () => {
   const changeEmail = async () => {
     try {
       const response = await axiosInstance.patch('/users', {
-        id: user._id,
+        id: user?._id,
         email,
-      });
-      console.log(response.data);
-      setNotify(response.data);
-    } catch (err) {
-      console.log(err);
-      setNotify(err.response.data.message);
-    }
-  };
-
-  const changePassword = async () => {
-    try {
-      const response = await axiosInstance.patch('/users', {
-        id: user._id,
-        password,
       });
       console.log(response.data);
       setNotify(response.data);
@@ -123,11 +108,18 @@ const ProfileSetting = () => {
   };
 
   return (
-    <div className="w-full h-max py-3 px-8 bg-zinc-50">
+    <div className="w-full h-max py-3 px-8 bg-zinc-50 rounded-md">
       <span onClick={() => navigate(-1)} className="w-full pb-4">
         <img src={arrowSvg} className="w-6 h-6 rotate-180" />
       </span>
-      <h4 className="h4 font-bold mb-6">Setting</h4>
+      <h5 className="h5 font-bold mb-6 flex items-center gap-2">
+        <span className="max-sm:hidden block">Setting</span>
+        <img
+          src={angleDownSvg}
+          className="max-sm:hidden rotate-90 h-6 translate-y-1 w-4"
+        />
+        Personal information
+      </h5>
       <div
         className="flex gap-2 items-center mb-16 relative bg-zinc-200 bg-cover bg-center w-[20rem] rounded-md h-32"
         style={{
@@ -149,7 +141,7 @@ const ProfileSetting = () => {
         </label>
         <div className="w-24 h-24 absolute top-1/3 left-2 translate-y-1/3">
           <img
-            src={user?.image ? user.image : userSvg}
+            src={user?.image ? user?.image : userSvg}
             alt=""
             className="w-full h-full rounded-full object-cover object-center"
           />
@@ -168,8 +160,8 @@ const ProfileSetting = () => {
           </label>
         </div>
       </div>
-      <p className="body font-normal italic text-zinc-500">
-        Edit and save your information
+      <p className="body font-normal mb-4 italic text-zinc-500">
+        Edit and save your Personal information
       </p>
       <div className="flex flex-col gap-2 py-2 px-3 border border-blue-300/50 rounded-md mb-4">
         <p className="body-1 font-semibold">Names:</p>
@@ -178,7 +170,7 @@ const ProfileSetting = () => {
           value={names}
           onChange={() => setnames(event.target.value)}
           className="w-full px-4 py-2 outline-none border border-gray-300 "
-          placeholder={user.names}
+          placeholder={user?.names}
         />
         <div className="w-full flex justify-end">
           <Button blue onClick={changeName}>
@@ -193,7 +185,7 @@ const ProfileSetting = () => {
           value={username}
           onChange={() => setUsername(event.target.value)}
           className="w-full px-4 py-2 outline-none border border-gray-300 "
-          placeholder={user.username}
+          placeholder={user?.username}
         />
         <div className="w-full flex justify-end">
           <Button blue onClick={changeusername}>
@@ -208,25 +200,10 @@ const ProfileSetting = () => {
           value={email}
           onChange={() => setemail(event.target.value)}
           className="w-full px-4 py-2 outline-none border border-gray-300 "
-          placeholder={user.email}
+          placeholder={user?.email}
         />
         <div className="w-full flex justify-end">
           <Button blue onClick={changeEmail}>
-            Save
-          </Button>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 py-2 px-3 border border-blue-300/50 rounded-md mb-4">
-        <p className="body-1 font-semibold">Location:</p>
-        <input
-          type="text"
-          value={password}
-          onChange={() => setpassword(event.target.value)}
-          className="w-full px-4 py-2 outline-none border border-gray-300 "
-          placeholder="Choose new Password"
-        />
-        <div className="w-full flex justify-end">
-          <Button blue onClick={changePassword}>
             Save
           </Button>
         </div>

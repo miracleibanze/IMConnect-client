@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
@@ -7,7 +7,9 @@ import AppContextProvider from './components/AppContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <AppContextProvider>
         <App />
       </AppContextProvider>

@@ -61,8 +61,8 @@ export const utilitySidebarLinks = [
   },
   {
     id: 1,
-    name: 'Likes',
-    link: '/dash/likes',
+    name: 'My Posts',
+    link: '/dash/my_posts',
     icon: thumbsUpSvg,
   },
 ];
@@ -95,3 +95,31 @@ export const postIcons = [
   },
 ];
 export const postFeeling = ['Happy', 'Sad', 'Excited', 'Anxiety', 'Sick'];
+
+export const settings = [
+  {
+    id: 0,
+    name: 'Personal Information',
+    link: 'profile',
+  },
+  {
+    id: 1,
+    name: 'Account Setting',
+    link: 'account',
+  },
+  {
+    id: 2,
+    name: 'Notification Preferences',
+    link: 'notifications',
+  },
+  {
+    id: 3,
+    name: 'Messaging Setting',
+    link: 'messages',
+  },
+  {
+    id: 4,
+    name: 'Help & Support',
+    link: 'help_support',
+  },
+];

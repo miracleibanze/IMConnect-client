@@ -19,9 +19,11 @@ import Sidebar2 from '../../components/Sidebar2';
 import WelcomeSkeleton from '../../components/skeletons/WelcomeSkeleton.jsx';
 import useWrappedState from '../../components/useWrappedState.jsx';
 import { AppContext } from '../../components/AppContext.jsx';
-import Likes from '../../components/Likes.jsx';
+import MyPosts from '../../components/MyPosts.jsx';
 import ProfileSetting from '../SettingRoutes/ProfileSetting.jsx';
 import OutletContainer from '../../components/Outlet.jsx';
+import AccountSetting from '../SettingRoutes/AccountSetting.jsx';
+import DeleteModal from '../../components/DeleteModal.jsx';
 
 const Hero = lazy(() => import('../../components/Hero.jsx'));
 const CreatePost = lazy(() => import('../../components/CreatePost.jsx'));
@@ -31,9 +33,6 @@ const People = lazy(() => import('../profileRoutes/People.jsx'));
 const Person = lazy(() => import('../profileRoutes/Person.jsx'));
 const Photos = lazy(() => import('../profileRoutes/Photos.jsx'));
 const Setting = lazy(() => import('../SettingRoutes/Setting.jsx'));
-// const ProfileSetting = lazy(
-//   () => import('../SettingRoutes/ProfileSetting.jsx')
-// );
 
 export const context = createContext();
 
@@ -44,6 +43,7 @@ const Welcome = () => {
   const [people, setPeople] = useState();
   const [posts, setPosts] = useState();
   const appContext = useContext(AppContext);
+  const { isLogged, isLoading, user } = appContext;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -111,7 +111,7 @@ const Welcome = () => {
                       <Route path="post/:text" element={<CreatePost />} />
                       <Route path="search" element={<Hero />} />
                       <Route path="profile" element={<Person />} />
-                      <Route path="likes" element={<Likes />} />
+                      <Route path="my_posts" element={<MyPosts />} />
                       <Route path="people" element={<Outlet />}>
                         <Route index element={<People />} />
                         <Route path="person/:username" element={<Person />}>
@@ -121,6 +121,7 @@ const Welcome = () => {
                       <Route path="setting" element={<Outlet />}>
                         <Route index element={<Setting />} />
                         <Route path="profile" element={<ProfileSetting />} />
+                        <Route path="account" element={<AccountSetting />} />
                       </Route>
                       <Route path="messages" element={<AllMessages />} />
                       <Route

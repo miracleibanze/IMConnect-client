@@ -68,8 +68,8 @@ const Feeds = () => {
       )}
 
       {nameParam && (
-        <div className="bg-zinc-200 py-3 rounded-md w-full">
-          <h4 className="h4 mb-4 font-semibold px-4 border-b border-zinc-500/50">
+        <div className="bg-zinc-200 py-3 rounded-md w-full h-full">
+          <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
             People
           </h4>
           <div className="relative w-full h-full">
@@ -83,7 +83,7 @@ const Feeds = () => {
                   />
                 ))
               ) : (
-                <div className="body-2 font-semibold text-zinc-700/50 text-center min-h-[10rem]">
+                <div className="body-2 font-semibold text-zinc-700/50 flex-center-both min-h-[10rem]">
                   No people found
                 </div>
               )
@@ -93,27 +93,28 @@ const Feeds = () => {
           </div>
         </div>
       )}
-
-      <div className="bg-zinc-200 py-8 px-4 h-full flex flex-col">
-        <h4 className="h4 mb-4 font-semibold px-4 border-b border-zinc-500/50">
-          Posts
-        </h4>
-        <div className="relative h-full w-full">
-          {!loading ? (
-            posts.length > 0 ? (
-              posts.map((item) => (
-                <PostCard key={item.id || item._id} post={item} />
-              ))
+      {(location.pathname === '/dash' || textParam) && (
+        <div className="bg-zinc-200 h-full flex flex-col g-4 w-full relative">
+          <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
+            Posts
+          </h4>
+          <div className="h-full w-full px-4">
+            {!loading ? (
+              posts.length > 0 ? (
+                posts.map((item) => (
+                  <PostCard key={item.id || item._id} post={item} />
+                ))
+              ) : (
+                <h4 className="body-2 text-zinc-700/50 min-h-[7rem] w-full text-center font-semibold">
+                  No posts found
+                </h4>
+              )
             ) : (
-              <h4 className="body-2 text-zinc-700/50 min-h-[7rem] w-full text-center font-semibold">
-                No posts found
-              </h4>
-            )
-          ) : (
-            <FeedsSkeleton />
-          )}
+              <FeedsSkeleton />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

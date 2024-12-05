@@ -6,6 +6,7 @@ import Loader from '../../components/skeletons/Loader';
 import DeleteModal from '../../components/DeleteModal';
 import axiosInstance from '../utils/axiosInstance';
 import { AppContext } from '../../components/AppContext';
+import { settings } from '../../components/constants';
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -53,42 +54,15 @@ const Setting = () => {
       <h3 className="h3 font-semibold">Setting</h3>
       {/* Settings Links */}
       <div className="flex-center-both w-full max-w-lg">
-        <span
-          onClick={() => navigate('/dash/setting/profile')}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
-        >
-          Personal Information
-        </span>
-        <span
-          onClick={() => navigate('/dash/setting/account')}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
-        >
-          Account Setting
-        </span>
-        <span
-          onClick={() => navigate('/dash/setting/notifications')}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
-        >
-          Notification Preferences
-        </span>
-        <span
-          onClick={() => navigate('/dash/setting/messaging')}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
-        >
-          Messaging Setting
-        </span>
-        <span
-          onClick={() => navigate('/dash/setting/info')}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
-        >
-          Notification Information
-        </span>
-        <span
-          onClick={() => navigate('/dash/setting/help')}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
-        >
-          Help & Support
-        </span>
+        {settings.map((item) => (
+          <span
+            onClick={() => navigate(`/dash/setting/${item.link}`)}
+            key={item.id}
+            className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50"
+          >
+            {item.name}
+          </span>
+        ))}
       </div>
       {/* About Section */}
       <h3 className="h3 font-semibold mt-12">About</h3>
@@ -148,9 +122,8 @@ const Setting = () => {
           Danger Zone
         </h5>
         <Button
-          border
           onClick={() => setDeleteAccountPrompt(true)}
-          className="w-full px-4 py-2 rounded-md hover:bg-zinc-200/50 bg-[#ff0000] text-white bg-clip-padding"
+          className="w-full px-4 py-2 rounded-md hover:bg-red-500/90 bg-[#ff0000] text-white bg-clip-padding"
         >
           Delete account
         </Button>

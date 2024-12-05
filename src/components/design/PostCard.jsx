@@ -60,7 +60,7 @@ const PostCard = ({ post, className }) => {
 
   return (
     <div
-      className={`h-max flex flex-col gap-2 py-4 my-4 px-4 rounded-md ${
+      className={`h-full flex flex-col py-4 px-4 rounded-md ${
         className ? className : 'bg-zinc-100'
       }`}
     >
@@ -101,7 +101,7 @@ const PostCard = ({ post, className }) => {
         ))}
       </div>
 
-      <div className="flex justify-between w-full gap-2 mt-2">
+      <div className="flex justify-between w-full gap-2 pb-4">
         {Array.isArray(post.images) &&
           post.images.map((item, index) => (
             <div
@@ -120,7 +120,7 @@ const PostCard = ({ post, className }) => {
             </div>
           ))}
       </div>
-      <div className="w-full grid grid-cols-3 caption tracking-tighter mt-4 body-1 border-t-2 border-zinc-300/50 pt-4">
+      <div className="w-full grid grid-cols-3 caption tracking-tighter body-1 border-t-2 border-zinc-300/50 pt-4">
         <div className="w-full flex-center-hor gap-3" onClick={handleLike}>
           {postLikes}
           <img

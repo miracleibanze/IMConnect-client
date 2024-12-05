@@ -11,7 +11,7 @@ const CreatePost = () => {
   const context = useContext(AppContext);
   if (!context) return <Loader />;
   const { user, usePageTitle } = context;
-  usePageTitle('Create Post } IMConnect');
+  usePageTitle('Create Post | IMConnect');
   const location = useLocation().pathname;
   const navigate = useNavigate();
   const [postPartToEdit, setPostPartToEdit] = useState('myPost');

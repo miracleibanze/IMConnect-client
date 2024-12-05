@@ -5,10 +5,11 @@ import ListSkeleton from './skeletons/ListSkeleton';
 import Notice from './design/Notice';
 import PostCard from './design/PostCard';
 
-const Likes = () => {
+const MyPosts = () => {
   const context = useContext(AppContext);
-  if (!context) return <ListSkeleton />;
-  const { user } = context;
+  const { user, usePageTitle } = context;
+  usePageTitle && usePageTitle(`My posts | IMConnect`);
+  if (!context || !context?.user) return <ListSkeleton />;
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,4 +55,4 @@ const Likes = () => {
   );
 };
 
-export default Likes;
+export default MyPosts;

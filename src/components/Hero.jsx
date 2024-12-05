@@ -8,7 +8,7 @@ const Hero = () => {
   const { usePageTitle } = useContext(AppContext);
   usePageTitle('Home | IMConnect');
   return (
-    <div className="bg-zinc-100 p-3 rounded-md w-full h-full relative">
+    <div className="bg-zinc-100 p-3 rounded-md w-full h-full min-h-max flex-between-vert relative gap-2">
       {pathname !== '/dash/search' && <WhatInYourMind />}
       <Feeds />
     </div>

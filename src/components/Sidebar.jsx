@@ -19,11 +19,14 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const [loggingOut, setLoggingOut] = useState(false);
+
   const handleLogout = () => {
     setLoggingOut(true);
     sessionStorage.removeItem('userSession');
-    setUser();
     navigate('/');
+    setTimeout(() => {
+      setUser('');
+    }, 1000);
     setLoggingOut(false);
   };
   const toggleWrapped = () => {
@@ -48,11 +51,13 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           onClick={toggleWrapped}
         />
         <div
-          className={`h-full min-w-full max-w-full flex flex-col justify-between items-center ${
+          className={`h-full min-w-full max-w-full flex flex-col pt-4 justify-between items-center ${
             !wrapped && 'mt-10'
           }`}
         >
-          <div className={`${wrapped ? 'w-max' : 'w-full'}`}>
+          <div
+            className={`${wrapped ? 'w-max' : 'w-full'} flex flex-col gap-y-2`}
+          >
             {homeSidebarLinks.map((item) => (
               <button
                 className={`w-full outline-none py-2 font-semibold px-4 hover:bg-slate-300/50 flex items-center gap-2 ${
@@ -79,7 +84,7 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
           <div
             className={`${
               wrapped ? 'w-max' : 'w-full'
-            } flex flex-col max-h-1/3`}
+            } flex flex-col max-h-1/3 gap-y-2`}
           >
             {utilitySidebarLinks.map((item) => (
               <button
@@ -100,7 +105,9 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
               </button>
             ))}
           </div>
-          <div className={`${wrapped ? 'w-max' : 'w-full'} h-1/4`}>
+          <div
+            className={`${wrapped ? 'w-max' : 'w-full'} h-1/4 flex flex-col gap-y-2`}
+          >
             {bottomSidebarLinks.map((item) => (
               <button
                 className={`cursor-pointer w-full py-2 font-semibold px-4 hover:bg-slate-300/50 flex items-center gap-2  ${
@@ -112,8 +119,8 @@ const Sidebar = ({ wrapped, setWrapped, setSearchBox }) => {
                     setLogout(true);
                   } else {
                     navigate(`${item.link}`);
+                    setWrapped(true);
                   }
-                  setWrapped(true);
                 }}
               >
                 <img

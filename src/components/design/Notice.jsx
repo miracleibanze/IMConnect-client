@@ -29,7 +29,8 @@ const Notice = ({
         }`}
       >
         <span className="font-semibold">{title}</span>
-        <span className="font-normal">{name}:</span>&nbsp;❗ {message}
+        {name && <span className="font-normal">{name} :</span>}&nbsp;❗{' '}
+        {message}
       </div>
     )
   );

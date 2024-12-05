@@ -1,41 +1,28 @@
 import { useContext, useEffect, useState } from 'react';
 import { userSvg } from '../../assets';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/axiosInstance';
 import ListSkeleton from '../../components/skeletons/ListSkeleton';
 import { AppContext } from '../../components/AppContext';
-import { connectSocket, getSocket } from '../utils/Socket'; // Import connectSocket and getSocket
+import axiosInstance from '../utils/axiosInstance';
 
 const MessageComponent = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-
-  if (!context) return <ListSkeleton message />;
-
-  const { user, usePageTitle } = context;
-  usePageTitle('Messages | IMConnect');
-
+  const { user, usePageTitle } = context || {};
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const getTime = (isoString) => {
-    if (!isoString) return 'Just now';
-    const date = new Date(isoString);
-    const options = { hour: '2-digit', minute: '2-digit', hour12: false };
-    return new Intl.DateTimeFormat('en-US', options).format(date);
-  };
+  if (!context || !context?.user) return <ListSkeleton message />;
+
+  usePageTitle('Messages | IMConnect');
 
   useEffect(() => {
-    // Establish socket connection
-    connectSocket();
-
     const fetchChatParticipants = async () => {
-      setLoading(true);
-      setError(null);
       try {
-        const response = await axiosInstance.get(`/messages/${user.username}`);
-        setFriends(response.data);
+        setLoading(true);
+        const response = await axiosInstance.get(`/messages/${user?.username}`);
+        setFriends(response.data || []);
       } catch (err) {
         console.error(err);
         setError('Failed to load messages. Please try again.');
@@ -44,50 +31,71 @@ const MessageComponent = () => {
       }
     };
 
-    fetchChatParticipants();
-
-    // Listen for 'newMessage' event from the server
-    const socket = getSocket(); // Get the active socket connection
-    socket.on('newMessage', (newMessage) => {
-      console.log('New message received:', newMessage);
-
-      // Update the friend list with the new message
-      setFriends((prevFriends) => {
-        const updatedFriends = [...prevFriends];
-        const participantIndex = updatedFriends.findIndex(
-          (friend) => friend.userId === newMessage.senderId
-        );
-
-        if (participantIndex !== -1) {
-          // Update existing participant's details
-          const participant = updatedFriends[participantIndex];
-          participant.earliestMessageSnippet = newMessage.message;
-          participant.earliestMessageTime = newMessage.timestamp;
-          participant.unread = true; // Mark as unread
-          updatedFriends.splice(participantIndex, 1, participant);
-        } else {
-          // Add new participant to the list
-          updatedFriends.unshift({
-            userId: newMessage.senderId,
-            names: newMessage.senderName || 'Unknown',
-            username: newMessage.senderUsername || '',
-            image: newMessage.senderImage || null,
-            earliestMessageSnippet: newMessage.message,
-            earliestMessageTime: newMessage.timestamp,
-            unread: true,
-          });
-        }
-
-        return updatedFriends;
-      });
-    });
-
-    // Cleanup on component unmount
-    return () => {
-      const socket = getSocket();
-      socket.disconnect();
-    };
+    if (user) fetchChatParticipants();
   }, [user]);
+
+  function getTime(isoString) {
+    const inputDate = new Date(isoString);
+    const now = new Date();
+
+    // Check for invalid date
+    if (isNaN(inputDate)) {
+      throw new Error('Invalid ISO date string');
+    }
+
+    // Helper function to format time in "hh:mm" format
+    const formatTimeOnly = (date) => {
+      const options = { hour: '2-digit', minute: '2-digit', hour12: false };
+      return new Intl.DateTimeFormat('en-US', options).format(date);
+    };
+
+    // Helper function to check if two dates are the same day
+    const isSameDay = (date1, date2) =>
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+
+    // Round both input time and current time to minutes
+    inputDate.setSeconds(0, 0);
+    now.setSeconds(0, 0);
+
+    // "Just now" if rounded input time equals the current time
+    if (+inputDate === +now) {
+      return 'Just now';
+    }
+
+    // Check if it's yesterday
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (isSameDay(inputDate, yesterday)) {
+      return `Yesterday, ${formatTimeOnly(inputDate)}`;
+    }
+
+    // Check if it's within the last week
+    const oneWeekAgo = new Date(now);
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    if (inputDate > oneWeekAgo && inputDate < yesterday) {
+      return 'Last week';
+    }
+
+    // Check if it's today
+    if (isSameDay(inputDate, now)) {
+      return formatTimeOnly(inputDate);
+    }
+
+    // Default: return the formatted date and time
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    };
+    return new Intl.DateTimeFormat('en-US', options).format(inputDate);
+  }
 
   return (
     <div className="bg-zinc-100 rounded-md px-3 w-full py-6 h-full min-h-max overflow-x-hidden relative">
@@ -106,7 +114,7 @@ const MessageComponent = () => {
           friends.map((person, index) => (
             <div
               className={`w-full p-4 rounded-md my-2 flex-between-hor transition-transform duration-200 gap-3 
-              ${person.unread ? 'bg-zinc-100 hover:scale-[1.03]' : 'bg-zinc-200'}`}
+              ${person.chatNotRead ? 'bg-zinc-200' : 'border border-zinc-300'}`}
               key={index}
               onClick={() => navigate(`/dash/message/to/${person.userId}`)}
             >

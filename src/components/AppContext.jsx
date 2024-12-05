@@ -7,6 +7,8 @@ const AppContextProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(true);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState(false);
+  const [error, setError] = useState('');
   const savedSession = JSON.parse(sessionStorage.getItem('userSession'));
 
   useEffect(() => {
@@ -46,7 +48,16 @@ const AppContextProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ user, setUser, isLogged, setIsLogged, isLoading, usePageTitle }}
+      value={{
+        user,
+        setUser,
+        isLogged,
+        setIsLogged,
+        isLoading,
+        usePageTitle,
+        messages,
+        setMessages,
+      }}
     >
       {children}
     </AppContext.Provider>
