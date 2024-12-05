@@ -105,7 +105,7 @@ const PostCard = ({ post, className }) => {
         {Array.isArray(post.images) &&
           post.images.map((item, index) => (
             <div
-              className="w-full flex-center-both aspect-[5/6] rounded-md overflow-hidden relative"
+              className="w-full flex-center-both h-auto max-h-[30rem] rounded-md overflow-hidden relative"
               key={index}
             >
               <div
