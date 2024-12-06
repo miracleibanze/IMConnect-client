@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/design/Button';
 import {
+  angleDownWhiteSvg,
   arrowSvg,
   imageSvg,
   loaderSvg,
@@ -32,6 +33,9 @@ const MyFriends = () => {
   const menuRef = useRef(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  const messagesEndRef = useRef(null);
+  const messageContainerRef = useRef(null);
 
   const markMessagesAsRead = async () => {
     try {
@@ -71,6 +75,7 @@ const MyFriends = () => {
   }, [otherUserId, user?._id]);
 
   const handleSendMessage = async () => {
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     if (!messageContent.trim() && !image) return;
 
     setIsSendingMessage(true);
@@ -189,14 +194,12 @@ const MyFriends = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMessageMenu(null); // Close the menu
+        setMessageMenu(null);
       }
     };
 
-    // Add event listener
     document.addEventListener('mousedown', handleClickOutside);
 
-    // Cleanup on unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -206,11 +209,47 @@ const MyFriends = () => {
     try {
       await axiosInstance.delete(`/messages/delete/${msgId}`);
 
-      // Update the messages state immutably
       setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
     } catch (error) {
       console.error('Error deleting message:', error);
       setError(error.response?.data?.message || 'Failed to delete the message');
+    }
+  };
+
+  useEffect(() => {
+    const checkIfAtBottom = () => {
+      const container = messageContainerRef.current;
+      if (container) {
+        const isBottom =
+          container.scrollHeight - container.scrollTop ===
+          container.clientHeight;
+        setIsAtBottom(isBottom);
+      }
+    };
+
+    checkIfAtBottom();
+
+    const container = messageContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkIfAtBottom);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', checkIfAtBottom);
+      }
+    };
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+
+      setTimeout(() => {
+        if (!isAtBottom) {
+          setIsAtBottom(true);
+        }
+      }, 500);
     }
   };
 
@@ -250,8 +289,16 @@ const MyFriends = () => {
           </p>
         </div>
       </section>
-
-      <main className="bg-zinc-200 h-full w-full flex flex-col-reverse overflow-x-hidden relative overflow-y-scroll scroll-design py-4">
+      <main
+        ref={messageContainerRef}
+        className="bg-zinc-200 h-full w-full flex flex-col-reverse overflow-x-hidden relative overflow-y-scroll scroll-design py-4"
+      >
+        <div
+          ref={messagesEndRef}
+          className="text-center caption italic text-zinc-500/80 pt-4"
+        >
+          You are now connected to {person.names}.
+        </div>
         {loadingMessages ? (
           <Loader />
         ) : messages.length > 0 ? (
@@ -285,15 +332,15 @@ const MyFriends = () => {
               )}
 
               <span
-                className={`relative py-2 max-w-xs flex flex-col gap-0 rounded-2xl shadow-lg ${msg.senderId === user._id ? 'bg-teal-100 text-teal-800 rounded-br-none' : 'bg-neutral-300 text-teal-800 rounded-bl-none'} ${msg.isImage ? 'min-h-[10rem] max-w-[50vw] min-w-[10rem]' : ''} px-2`}
+                className={`relative py-2 text-start max-w-xs flex flex-col gap-0 rounded-2xl shadow-lg ${msg.senderId === user._id ? 'bg-teal-100 text-teal-800 rounded-br-none' : 'bg-neutral-300 text-teal-800 rounded-bl-none'} ${msg.isImage ? 'min-h-[10rem] max-w-[50vw] min-w-[10rem]' : ''} px-2`}
                 onClick={() => {
                   if (msg.isImage) setPreview(msg.message);
                 }}
               >
                 {!msg.isImage && (
                   <>
-                    <span className="px-6">{msg.message}</span>
-                    <span className="tagline min-w-full text-end">
+                    <span className="pr-6 pl-2">{msg.message}</span>
+                    <span className="caption min-w-full text-end pl-10">
                       {getTime(msg.timestamp)}
                     </span>
                   </>
@@ -320,6 +367,15 @@ const MyFriends = () => {
           </p>
         )}
       </main>
+      {!isAtBottom && (
+        <img
+          src={angleDownWhiteSvg}
+          className="absolute bottom-[5rem] right-6 bg-teal-500 text-white rounded-full p-2 shadow-lg w-10 h-10"
+          onClick={scrollToBottom}
+        />
+      )}
+
+      {/* Scroll to Bottom Button */}
       {preview && (
         <div className="absolute z-[100] inset-0 p-4 bg-zinc-900/50">
           <img
@@ -344,7 +400,7 @@ const MyFriends = () => {
           className={`w-full p-1 flex justify-between flex-col gap-2 h-[10rem] ${!sendImage && 'hidden'}`}
         >
           <img
-            className="w-[7rem] h-[7rem] bg-zinc-200 border rounded-md"
+            className="w-[7rem] h-[7rem] bg-zinc-200 border rounded-md object-contain"
             src={image ? image : loaderSvg}
           />
           <Button

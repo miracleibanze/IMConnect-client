@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import { loaderSvg } from '../../assets';
 import { AppContext } from '../../components/AppContext';
+import Notice from '../../components/design/Notice';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage(error?.response?.data?.message || error?.message);
+      setErrorMessage('Service not available now, Please try again Later');
     } finally {
       setloading(false);
     }
@@ -68,6 +69,7 @@ const Login = () => {
 
   return (
     <div className="w-full shadow-2xl shadow-black flex flex-col gap-4 px-8 py-12 max-w-md bg-zinc-50 relative">
+      <Notice message={errorMessage} onCancel={() => setErrorMessage('')} />
       <form
         className="form w-full flex flex-col gap-4 bg-zinc-50"
         onSubmit={handleLogin}
