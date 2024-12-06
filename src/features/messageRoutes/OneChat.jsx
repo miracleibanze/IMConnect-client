@@ -297,7 +297,7 @@ const MyFriends = () => {
           ref={messagesEndRef}
           className="text-center caption italic text-zinc-500/80 pt-4"
         >
-          You are now connected to {person.names}.
+          You are now connected to {person?.names || '...'}.
         </div>
         {loadingMessages ? (
           <Loader />
