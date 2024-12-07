@@ -43,7 +43,6 @@ const Welcome = () => {
   const [people, setPeople] = useState();
   const [posts, setPosts] = useState();
   const appContext = useContext(AppContext);
-  const { isLogged, isLoading, user } = appContext;
 
   useEffect(() => {
     const timer = setTimeout(() => {

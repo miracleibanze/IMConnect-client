@@ -96,11 +96,11 @@ const Feeds = () => {
       )}
 
       {(location.pathname === '/dash' || textParam) && (
-        <div className="w-full flex flex-col gap-4 relative">
+        <div className="w-full flex flex-col gap-4 relative h-full p-2">
           <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
             Posts
           </h4>
-          <div className="w-full px-4 flex flex-col gap-4">
+          <div className="w-full px-4 flex flex-col gap-4 h-full relative">
             {!loading ? (
               posts.length > 0 ? (
                 posts.map((item) => (

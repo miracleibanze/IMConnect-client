@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { chatDotsSvg, userSvg } from '../../assets';
 import Button from './Button';
 import axiosInstance from '../../features/utils/axiosInstance';
 import Notice from './Notice';
 
 const PersonCard = ({ person, className, friends, userId, requests }) => {
-  const [isRequestSent, setIsRequestSent] = useState(false);
+  const [isRequestSent, setIsRequestSent] = useState(
+    person.requestSent || false
+  ); // Set initial state based on person.requestSent
   const [isFriend, setIsFriend] = useState(friends);
   const [confirmed, setConfirmed] = useState(false);
   const [notice, setNotice] = useState('');
@@ -13,7 +15,7 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
 
   const sendFriendRequest = async () => {
     try {
-      console.log('send a request');
+      console.log('Sending a friend request');
       // Send API call to send friend request
       const response = await axiosInstance.post(
         `/users/send-friend-request/${person._id}`,
@@ -22,11 +24,15 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
         }
       );
 
-      setIsRequestSent(true);
+      if (response.status === 200) {
+        setIsRequestSent(true);
+        setNotice('Friend request sent.');
+      } else {
+        setNotice('Failed to send friend request.');
+      }
     } catch (error) {
-      setNotice('Failed to send friend request.');
-      console.log(error);
-      alert('An error occurred while sending the request.');
+      console.error(error);
+      setNotice('An error occurred while sending the request.');
     }
   };
 
@@ -43,12 +49,13 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
       if (response.status === 200) {
         setConfirmed(true);
         setNotice('Friend request accepted!');
+        setIsFriend(true);
       } else {
         setNotice('Failed to accept friend request.');
       }
     } catch (error) {
       console.error('Error accepting friend request:', error);
-      alert('An error occurred while accepting the request.');
+      setNotice('An error occurred while accepting the request.');
     }
   };
 
@@ -69,7 +76,7 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
         setNotice('Failed to decline friend request.');
       }
     } catch (error) {
-      setNotice('request already made');
+      setNotice('An error occurred while processing the request.');
     }
   };
 
@@ -78,10 +85,14 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
     setNotice('Your friend request is being withdrawn.');
   };
 
+  useEffect(() => {
+    if (isRequestSent) {
+      setNotice('Friend request sent.');
+    }
+  }, [isRequestSent]);
+
   return (
-    <div
-      className={`px-6 py-2 w-full flex-between-hor gap-5 ${className && className}`}
-    >
+    <div className={`px-6 py-2 w-full flex-between-hor gap-5 ${className}`}>
       <Notice message={notice} onClose={() => setNotice('')} />
       <img
         src={person.image ? person.image : userSvg}
@@ -97,17 +108,19 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
           </p>
           <p className="body-1 font-normal">{person.username}</p>
         </a>
+
         {requests && !declined && (
           <Button border rounded light onClick={declineRequest}>
             Decline
           </Button>
         )}
 
-        {requests && (
+        {requests && !declined && (
           <Button border rounded light onClick={acceptRequest}>
             Confirm
           </Button>
         )}
+
         <Button
           blue={!isFriend && !isRequestSent}
           border={isRequestSent || isFriend}
@@ -123,19 +136,17 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
           href={isFriend ? `/dash/message/to/${person._id}` : null}
           className={isFriend && 'p-1'}
         >
-          <>
-            {isRequestSent ? (
-              isFriend ? (
-                <img src={chatDotsSvg} className="w-6 h-6 hover:h-8" />
-              ) : (
-                'Request Sent'
-              )
-            ) : isFriend ? (
-              <img src={chatDotsSvg} className="w-7 h-7" />
+          {isRequestSent ? (
+            isFriend ? (
+              <img src={chatDotsSvg} className="w-6 h-6 hover:h-8" />
             ) : (
-              'Add Friend'
-            )}
-          </>
+              'Request Sent'
+            )
+          ) : isFriend ? (
+            <img src={chatDotsSvg} className="w-7 h-7" />
+          ) : (
+            'Add Friend'
+          )}
         </Button>
       </div>
     </div>

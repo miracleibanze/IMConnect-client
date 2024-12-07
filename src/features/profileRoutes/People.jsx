@@ -24,9 +24,7 @@ const People = () => {
     const handlePeople = async () => {
       setloadingNonFriends(true);
       try {
-        console.log(user.username); // Ensure that user.username exists
         const response = await axiosInstance.get(`/users/${user.username}`);
-        console.log(response);
         setFriends(response.data.friends);
         setNonFriends(response.data.nonFriends);
       } catch (error) {
@@ -49,19 +47,6 @@ const People = () => {
     handlePeople();
     handleRequest();
   }, [user]); // Dependency array makes sure this runs when user changes
-
-  const sendFriendRequest = async (userId) => {
-    try {
-      const response = await fetch(`/friend-request/${userId}`, {
-        method: 'POST',
-      });
-      if (response.ok) {
-        alert('Friend request sent!');
-      }
-    } catch (error) {
-      console.error('Error sending friend request:', error);
-    }
-  };
 
   return (
     <div className="h-full min-h-max bg-zinc-100 rounded-md w-full p-4 relative">
@@ -144,7 +129,7 @@ const People = () => {
         )}
       </div>
       <h5 className="h5 w-full mb-4 font-semibold px-4">People you may know</h5>
-      <div className="relative h-4/5">
+      <div className="relative h-full">
         {!loadingnonFriends ? (
           <>
             {nonFriends?.length > 0 ? (

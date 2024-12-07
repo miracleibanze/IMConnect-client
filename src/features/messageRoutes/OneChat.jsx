@@ -15,6 +15,7 @@ import Loader from '../../components/skeletons/Loader';
 import axiosInstance from '../utils/axiosInstance';
 import Notice from '../../components/design/Notice';
 import { AppContext } from '../../components/AppContext';
+import GetTime from '../utils/GetTime';
 
 const MyFriends = () => {
   const { user, messages, setMessages } = useContext(AppContext);
@@ -138,59 +139,6 @@ const MyFriends = () => {
       setIsUploadingImage(false);
     }
   };
-  function getTime(isoString) {
-    const inputDate = new Date(isoString);
-    const now = new Date();
-
-    if (isNaN(inputDate)) {
-      return '';
-    }
-
-    const formatTimeOnly = (date) => {
-      const options = { hour: '2-digit', minute: '2-digit', hour12: false };
-      return new Intl.DateTimeFormat('en-US', options).format(date);
-    };
-
-    const isSameDay = (date1, date2) =>
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate();
-
-    inputDate.setSeconds(0, 0);
-    now.setSeconds(0, 0);
-
-    if (+inputDate === +now) {
-      return 'Just now';
-    }
-
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (isSameDay(inputDate, yesterday)) {
-      return `Yesterday, ${formatTimeOnly(inputDate)}`;
-    }
-
-    const oneWeekAgo = new Date(now);
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-
-    if (inputDate > oneWeekAgo && inputDate < yesterday) {
-      return 'Last week';
-    }
-
-    if (isSameDay(inputDate, now)) {
-      return formatTimeOnly(inputDate);
-    }
-
-    const options = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    };
-    return new Intl.DateTimeFormat('en-US', options).format(inputDate);
-  }
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -270,24 +218,39 @@ const MyFriends = () => {
         className="w-full p-2 flex-between-hor gap-4"
         onClick={() => navigate(`/dash/people/person/${person?.username}`)}
       >
-        <img
-          src={person?.image || userSvg}
-          className="w-12 h-12 rounded-md object-cover object-top bg-zinc-200"
-          alt="Profile"
-        />
-        <div className="w-full flex flex-col group cursor-pointer">
-          <p className="body-1 font-semibold group-hover:underline">
-            {person?.names || 'Unknown user'}
-          </p>
-          <p className="body-2 font-semibold flex gap-x-6 flex-wrap leading-none">
-            <span className="group-hover:underline">
-              {person?.username || 'username'}
-            </span>
-            <span className="font-normal italic text-zinc-600">
-              {person?.email || 'email'}
-            </span>
-          </p>
-        </div>
+        {!loadingMessages ? (
+          <>
+            <img
+              src={person?.image || userSvg}
+              className="w-12 h-12 rounded-md object-cover object-top bg-zinc-200"
+              alt="Profile"
+            />
+            <div className="w-full flex flex-col group cursor-pointer">
+              <p className="body-1 font-semibold group-hover:underline">
+                {person?.names || 'Unknown user'}
+              </p>
+              <p className="body-2 font-semibold flex gap-x-6 flex-wrap leading-none">
+                <span className="group-hover:underline">
+                  {person?.username || 'username'}
+                </span>
+                <span className="font-normal italic text-zinc-600">
+                  {person?.email || 'email'}
+                </span>
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="min-w-12 h-12 rounded-md bg-zinc-200" />
+            <div className="w-full h-full flex flex-col justify-evenly">
+              <div className="w-[10rem] h-4 rounded-md bg-zinc-200" />
+              <div className="w-full flex gap-2">
+                <div className="w-[5rem] h-4 rounded-md bg-zinc-200" />
+                <div className="w-[7rem] h-4 rounded-md bg-zinc-200" />
+              </div>
+            </div>
+          </>
+        )}
       </section>
       <main
         ref={messageContainerRef}
@@ -341,7 +304,7 @@ const MyFriends = () => {
                   <>
                     <span className="pr-6 pl-2">{msg.message}</span>
                     <span className="caption min-w-full text-end pl-10">
-                      {getTime(msg.timestamp)}
+                      <GetTime time={msg.timestamp} />
                     </span>
                   </>
                 )}
@@ -354,7 +317,7 @@ const MyFriends = () => {
                     <span
                       className={`absolute text-zinc-50 right-0 left-0 bottom-0 bg-gradient-to-b from-black/10 to-black h-8 z-[100] text-end pr-2 ${msg.senderId === user._id ? 'rounded-bl-md' : 'rounded-br-md'}`}
                     >
-                      {getTime(msg.timestamp)}
+                      <GetTime time={msg.timestamp} />
                     </span>
                   </span>
                 )}
@@ -417,7 +380,7 @@ const MyFriends = () => {
         <label className={`flex items-center ${sendImage && 'hidden'}`}>
           <img
             src={imageSvg}
-            className="h-8 min-w-8 border-zinc-300 flex-center-both"
+            className="h-8 aspect-square border-zinc-300 flex-center-both"
           />
           <input
             type="file"

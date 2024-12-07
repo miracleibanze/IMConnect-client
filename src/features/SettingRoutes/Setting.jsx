@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { arrowSvg } from '../../assets';
+import { angleDownSvg, arrowSvg } from '../../assets';
 import Button from '../../components/design/Button';
 import { useContext, useState } from 'react';
 import Loader from '../../components/skeletons/Loader';
@@ -11,6 +11,9 @@ import { settings } from '../../components/constants';
 const Setting = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
+  const [viewAbout, setViewAbout] = useState();
+
+  const toggleAbout = () => setViewAbout(!viewAbout);
 
   if (!context) {
     return <Loader />;
@@ -64,59 +67,79 @@ const Setting = () => {
           </span>
         ))}
       </div>
-      {/* About Section */}
-      <h3 className="h3 font-semibold mt-12">About</h3>
-      <div className="relative about">
-        <i>
-          Hello, and welcome to **IMConnect**, your new go-to platform for
-          real-time messaging and social posting! We're thrilled to have you
-          here as one of our first visitors. Together, we’ll shape this
-          community into something truly amazing.
-        </i>
-        <p className="font-bold h5 mt-12">
-          Here’s what you can do on IMConnect:
-        </p>
-        <p className="h5 mt-6 font-semibold">1. Real-Time Messaging</p>
-        <i>
-          Chat instantly with friends and contacts. Start a conversation,
-          connect with others, and enjoy seamless communication with no delays.
-        </i>
-        <i>
-          Head over to the **Messages** section to start a new chat or select an
-          existing contact to begin.
-        </i>
-        <p className="h5 mt-6 font-semibold">2. Create Posts</p>
-        <i>
-          Express yourself by sharing updates, thoughts, or announcements.
-          Whether it's a short message or a big idea, the **Post** section is
-          your space to share.
-        </i>
-        <i>
-          You can also interact with others by liking and commenting on their
-          posts.
-        </i>
-        <p className="h5 mt-6 font-semibold">3. Engage with Others</p>
-        <i>
-          Discover and interact with posts from the community. Like, comment,
-          and expand your network while building connections with others.
-        </i>
-        <p className="h5 mt-6 font-semibold">4. Send Feedback</p>
-        <i>
-          Your feedback matters! Have a suggestion, noticed an issue, or simply
-          want to say hello? Use the **Message** feature to reach out directly
-          to me.
-        </i>
-        <i>
-          We’re constantly improving IMConnect, and your input will help shape
-          its future. Together, we can make this platform truly amazing!
-        </i>
-        <i>
-          Thank you for being part of the early days of IMConnect. Dive in,
-          explore, and let us know what you think!
-        </i>
-        <p className="mt-8 h5">Warm regards,</p>
+      <div
+        className={`relative w-full hover:bg-zinc-200 ${viewAbout && 'p-2 rounded-xl bg-zinc-200'}`}
+      >
+        <div
+          onClick={toggleAbout}
+          className={`w-full px-4 py-2 rounded-md ${viewAbout ? 'hover:bg-zinc-100 font-semibold h5' : 'hover:bg-zinc-200/50'} flex-between-hor`}
+        >
+          <span>About IMConnect</span>
+          <img
+            src={angleDownSvg}
+            className={`h-5 w-5 ${viewAbout && 'rotate-180'}`}
+          />
+        </div>
+        {/* About Section */}
+        {viewAbout && (
+          <>
+            <div className="relative about">
+              <i>
+                Hello, and welcome to **IMConnect**, your new go-to platform for
+                real-time messaging and social posting! We're thrilled to have
+                you here as one of our first visitors. Together, we’ll shape
+                this community into something truly amazing.
+              </i>
+              <p className="font-semibold h5 mt-12">
+                Here’s what you can do on IMConnect:
+              </p>
+              <p className="h5 mt-6 font-medium">1. Real-Time Messaging</p>
+              <i>
+                Chat instantly with friends and contacts. Start a conversation,
+                connect with others, and enjoy seamless communication with no
+                delays.
+              </i>
+              <i>
+                Head over to the **Messages** section to start a new chat or
+                select an existing contact to begin.
+              </i>
+              <p className="h5 mt-6 font-medium">2. Create Posts</p>
+              <i>
+                Express yourself by sharing updates, thoughts, or announcements.
+                Whether it's a short message or a big idea, the **Post** section
+                is your space to share.
+              </i>
+              <i>
+                You can also interact with others by liking and commenting on
+                their posts.
+              </i>
+              <p className="h5 mt-6 font-medium">3. Engage with Others</p>
+              <i>
+                Discover and interact with posts from the community. Like,
+                comment, and expand your network while building connections with
+                others.
+              </i>
+              <p className="h5 mt-6 font-medium">4. Send Feedback</p>
+              <i>
+                Your feedback matters! Have a suggestion, noticed an issue, or
+                simply want to say hello? Use the **Message** feature to reach
+                out directly to me.
+              </i>
+              <i>
+                We’re constantly improving IMConnect, and your input will help
+                shape its future. Together, we can make this platform truly
+                amazing!
+              </i>
+              <i>
+                Thank you for being part of the early days of IMConnect. Dive
+                in, explore, and let us know what you think!
+              </i>
+              <p className="mt-8 h5">Warm regards,</p>
+            </div>
+            <h4 className="h4 italic">IBANZE Miracle</h4>
+          </>
+        )}
       </div>
-      <h4 className="h4 italic">IBANZE Miracle</h4>
       <div className="w-full p-4 mt-16 border border-[#ff0000] rounded-2xl relative pt-8">
         <h5 className="h5 font-normal text-[#ff0000] absolute top-0 -translate-y-[60%] bg-zinc-50 px-3 left-6">
           Danger Zone

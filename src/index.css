@@ -177,4 +177,36 @@ select {
     display: block;
     padding: 0 2rem;
   }
+  /* .hover-effect-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: #333; Base background */
+  /* color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+  } */
+
+  .hover-effect-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at var(--x, 0) var(--y, 0),
+      #d4d4d8 0%,
+      transparent 60%
+    );
+
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .hover-effect-container:hover::before {
+    opacity: 1;
+  }
 }
