@@ -49,7 +49,7 @@ const People = () => {
   }, [user]); // Dependency array makes sure this runs when user changes
 
   return (
-    <div className="h-full min-h-max bg-zinc-100 rounded-md w-full p-4 relative">
+    <div className="min-h-full h-max bg-zinc-100 rounded-md w-full p-4 relative flex flex-col">
       <h5
         className="h5 w-full mb-4 font-semibold px-4 flex-between-hor hover:bg-zinc-200 duration-150 py-2 rounded-md"
         onClick={() => setViewRequests(!viewRequests)}
@@ -129,7 +129,7 @@ const People = () => {
         )}
       </div>
       <h5 className="h5 w-full mb-4 font-semibold px-4">People you may know</h5>
-      <div className="relative flex flex-col gap-y-2 h-full">
+      <div className="relative flex flex-col gap-y-2 h-full flex-1">
         {!loadingnonFriends ? (
           <>
             {nonFriends?.length > 0 ? (
