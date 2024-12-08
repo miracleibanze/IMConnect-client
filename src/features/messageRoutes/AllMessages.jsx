@@ -78,7 +78,7 @@ export const MessageCard = ({ person, messageChanged }) => {
           <span className="flex items-center">
             {person.earliestMessage.senderId !== person.userId && 'You: '}
             {person.earliestMessage.isImage
-              ? `🖼️ Sent you an image.`
+              ? `🖼️ Sent${person.earliestMessage.senderId !== person.userId && ' you '}an image.`
               : truncateText(messageSnippet)}
           </span>
           <span className="font-semibold">

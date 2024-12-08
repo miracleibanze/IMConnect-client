@@ -120,6 +120,6 @@ export const settings = [
   {
     id: 4,
     name: 'Help & Support',
-    link: 'help_support',
+    link: 'help',
   },
 ];

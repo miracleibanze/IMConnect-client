@@ -197,7 +197,7 @@ const MyFriends = () => {
         if (!isAtBottom) {
           setIsAtBottom(true);
         }
-      }, 500);
+      }, 1000);
     }
   };
 
@@ -268,7 +268,7 @@ const MyFriends = () => {
           messages.map((msg, index) => (
             <div
               key={index}
-              className={`w-full flex items-center px-6 py-2 group ${msg.senderId === user._id ? 'text-end justify-end group' : 'justify-start'}`}
+              className={`w-full flex items-center px-4 py-2 group ${msg.senderId === user._id ? 'text-end justify-end group' : 'justify-start'}`}
             >
               {msg.senderId === user._id && (
                 <span className="relative">
@@ -303,7 +303,7 @@ const MyFriends = () => {
                 {!msg.isImage && (
                   <>
                     <span className="pr-6 pl-2">{msg.message}</span>
-                    <span className="caption min-w-full text-end pl-10">
+                    <span className="text-[10px] min-w-full text-end pl-10">
                       <GetTime time={msg.timestamp} />
                     </span>
                   </>
@@ -315,7 +315,7 @@ const MyFriends = () => {
                       className="w-full h-auto rounded-md"
                     />
                     <span
-                      className={`absolute text-zinc-50 right-0 left-0 bottom-0 bg-gradient-to-b from-black/10 to-black h-8 z-[100] text-end pr-2 ${msg.senderId === user._id ? 'rounded-bl-md' : 'rounded-br-md'}`}
+                      className={`absolute text-zinc-50 right-0 left-0 bottom-0 bg-gradient-to-b from-black/10 to-black h-8 z-[100] text-sm text-end pr-2 ${msg.senderId === user._id ? 'rounded-bl-md' : 'rounded-br-md'}`}
                     >
                       <GetTime time={msg.timestamp} />
                     </span>
@@ -333,7 +333,7 @@ const MyFriends = () => {
       {!isAtBottom && (
         <img
           src={angleDownWhiteSvg}
-          className="absolute bottom-[5rem] right-6 bg-teal-500 text-white rounded-full p-2 shadow-lg w-10 h-10"
+          className="absolute bottom-[5rem] right-5 bg-teal-500 text-white rounded-full p-[0.165rem] shadow-lg w-4 h-4"
           onClick={scrollToBottom}
         />
       )}

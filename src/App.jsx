@@ -19,7 +19,7 @@ const Welcome = lazy(() => import('./features/authRoutes/Welcome.jsx'));
 const App = () => {
   const context = useContext(AppContext); // Access context
   if (!context) return <Loader />;
-  const { isLogged, isLoading, user } = context;
+  const { isLogged, isLoading, user, messageChanged } = context;
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [notice, setNotice] = useState(null);
@@ -30,14 +30,22 @@ const App = () => {
     }
   }, [isLogged, pathname, navigate, isLoading]);
 
+  useEffect(() => {
+    if (!messageChanged) return;
+    if (pathname !== `/dash/message/to/${messageChanged?.senderId}`) {
+      setNotice('you have a new message.');
+    }
+  }, [messageChanged]);
+
   return (
     <>
       <Notice
-        name={notice?.name || ''}
-        message={notice?.content || ''}
-        title={notice?.message || ''}
-        redirect={notice?.senderId || null}
+        message={notice}
         onClose={() => setNotice(null)}
+        onClick={() => {
+          if (notice === 'you have a new message.')
+            navigate(`/dash/message/to/${messageChanged?.senderId}`);
+        }}
       />
       <Routes>
         {!isLogged && (

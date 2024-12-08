@@ -24,6 +24,8 @@ import ProfileSetting from '../SettingRoutes/ProfileSetting.jsx';
 import OutletContainer from '../../components/Outlet.jsx';
 import AccountSetting from '../SettingRoutes/AccountSetting.jsx';
 import DeleteModal from '../../components/DeleteModal.jsx';
+import NotYetDesigned from '../../components/NotYetDesigned.jsx';
+import PageNotFound from '../../components/PageNotFound.jsx';
 
 const Hero = lazy(() => import('../../components/Hero.jsx'));
 const CreatePost = lazy(() => import('../../components/CreatePost.jsx'));
@@ -54,6 +56,10 @@ const Welcome = () => {
 
     return () => clearTimeout(timer);
   }, [appContext, pathname]);
+
+  useEffect(() => {
+    if (!wrapped && window.innerWidth < 640) setWrapped(true);
+  }, [pathname]);
 
   useEffect(() => {
     const handleResize = () => setWrapped(window.innerWidth <= 640);
@@ -121,12 +127,20 @@ const Welcome = () => {
                         <Route index element={<Setting />} />
                         <Route path="profile" element={<ProfileSetting />} />
                         <Route path="account" element={<AccountSetting />} />
+                        <Route
+                          path="notifications"
+                          element={<NotYetDesigned />}
+                        />
+                        <Route path="messages" element={<NotYetDesigned />} />
+                        <Route path="help" element={<NotYetDesigned />} />
+                        <Route path="*" element={<PageNotFound />} />
                       </Route>
                       <Route path="messages" element={<AllMessages />} />
                       <Route
                         path="message/to/:userId"
                         element={<MyFriends />}
                       />
+                      <Route path="*" element={<PageNotFound />} />
                     </Routes>
                   </Suspense>
                 ) : (

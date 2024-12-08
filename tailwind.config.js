@@ -25,7 +25,7 @@ export default {
           '@apply text-[2rem] leading-normal md:text-[2.5rem]': {},
         },
         '.h4': {
-          '@apply text-[2rem] leading-normal': {},
+          '@apply text-[2rem] leading-normal text-[rgb(63,63,70/0.7)]': {},
         },
         '.h5': {
           '@apply text-2xl leading-normal': {},
