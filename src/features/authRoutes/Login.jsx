@@ -57,7 +57,10 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage('Service not available now, Please try again Later');
+      setErrorMessage(
+        'wrong ' + error.response?.data?.message ||
+          'Service not available now, Please try again Later'
+      );
     } finally {
       setloading(false);
     }
