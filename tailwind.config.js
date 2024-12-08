@@ -4,7 +4,12 @@ import plugin from 'tailwindcss/plugin';
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx,svg,css}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        handwriting: ['Dancing Script', 'cursive'],
+        hand: 'font-hand',
+      },
+    },
   },
   plugins: [
     plugin(function ({ addBase, addComponents, addUtilities }) {

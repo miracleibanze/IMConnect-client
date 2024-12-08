@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { angleDownSvg, arrowSvg } from '../../assets';
+import { angleDownSvg, arrowSvg, visitSvg } from '../../assets';
 import Button from '../../components/design/Button';
 import { useContext, useState } from 'react';
 import Loader from '../../components/skeletons/Loader';
@@ -68,7 +68,7 @@ const Setting = () => {
         ))}
       </div>
       <div
-        className={`relative w-full hover:bg-zinc-200 ${viewAbout && 'p-2 rounded-xl bg-zinc-200'}`}
+        className={`relative w-full hover:bg-zinc-200 ${viewAbout && 'lg:p-4 p-2 rounded-xl bg-zinc-200'}`}
       >
         <div
           onClick={toggleAbout}
@@ -134,9 +134,16 @@ const Setting = () => {
                 Thank you for being part of the early days of IMConnect. Dive
                 in, explore, and let us know what you think!
               </i>
-              <p className="mt-8 h5">Warm regards,</p>
+              <p className="mt-8 body-1">Warm regards,</p>
             </div>
-            <h4 className="h4 italic">IBANZE Miracle</h4>
+            <h4 className="h5 italic font-hand">IBANZE Miracle</h4>
+            <a
+              href="https://ibanze.vercel.app"
+              className="text-blue-600 underline flex items-center "
+            >
+              Know more about me
+              <img src={visitSvg} className="w-5 h-5" />
+            </a>
           </>
         )}
       </div>

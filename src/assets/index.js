@@ -38,6 +38,8 @@ import angleDownSvg from './home/angle-down.svg';
 import chatDotsSvg from './home/chat-dots.svg';
 import sendSvg from './home/send-fill.svg';
 
+import visitSvg from './editors/arrow-top-right-on-square.svg';
+
 export {
   loaderSvg,
   artUnderwater,
@@ -75,4 +77,5 @@ export {
   chatDotsSvg,
   sendSvg,
   angleDownWhiteSvg,
+  visitSvg,
 };
