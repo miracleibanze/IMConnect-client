@@ -13,6 +13,11 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
   const [notice, setNotice] = useState('');
   const [declined, setDeclined] = useState(false);
 
+  useEffect(() => {
+    if (person.requestSent) {
+      setIsRequestSent(true);
+    }
+  });
   const sendFriendRequest = async () => {
     try {
       console.log('Sending a friend request');
@@ -92,62 +97,66 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
   }, [isRequestSent]);
 
   return (
-    <div className={`px-6 py-2 w-full flex-between-hor gap-5 ${className}`}>
+    <div
+      className={`px-6 py-2 w-full flex-between-hor border border-zinc-400/50 rounded-xl gap-5 ${className}`}
+    >
       <Notice message={notice} onClose={() => setNotice('')} />
       <img
         src={person.image ? person.image : userSvg}
-        className="w-[3rem] h-[3rem] rounded-full border border-zinc-50 object-top object-cover"
+        className="h-[3rem] aspect-square rounded-full border border-zinc-50 object-top object-cover"
       />
-      <div className="w-full flex-between-hor gap-2">
+      <div className="w-full md:flex-between-hor flex-center-vert gap-2">
         <a
           href={`/dash/people/person/${person.username}`}
           className="w-full flex-col cursor-pointer group"
         >
-          <p className="body-1 font-semibold leading-none group-hover:underline">
+          <p className="body-2 font-semibold leading-none group-hover:underline">
             {person.names}
           </p>
-          <p className="body-1 font-normal">{person.username}</p>
+          <p className="text-sm font-light">{person.username}</p>
         </a>
-
-        {requests && !declined && (
-          <Button border rounded light onClick={declineRequest}>
-            Decline
-          </Button>
-        )}
-
-        {requests && !declined && (
-          <Button border rounded light onClick={acceptRequest}>
-            Confirm
-          </Button>
-        )}
-
-        <Button
-          blue={!isFriend && !isRequestSent}
-          border={isRequestSent || isFriend}
-          rounded={isRequestSent || isFriend}
-          light={isRequestSent || isFriend}
-          onClick={
-            isRequestSent
-              ? isFriend
-                ? null
-                : toggleRequest
-              : sendFriendRequest
-          }
-          href={isFriend ? `/dash/message/to/${person._id}` : null}
-          className={isFriend && 'p-1'}
-        >
-          {isRequestSent ? (
-            isFriend ? (
-              <img src={chatDotsSvg} className="w-6 h-6 hover:h-8" />
-            ) : (
-              'Request Sent'
-            )
-          ) : isFriend ? (
-            <img src={chatDotsSvg} className="w-7 h-7" />
-          ) : (
-            'Add Friend'
+        <div className="flex justify-end items-center gap-2">
+          {requests && !declined && (
+            <Button border rounded light onClick={declineRequest}>
+              Decline
+            </Button>
           )}
-        </Button>
+
+          {requests && !declined && (
+            <Button border rounded light onClick={acceptRequest}>
+              Confirm
+            </Button>
+          )}
+          {!requests && (
+            <Button
+              blue={!isFriend && !isRequestSent}
+              border={isRequestSent || isFriend}
+              rounded={isRequestSent || isFriend}
+              light={isRequestSent || isFriend}
+              onClick={
+                isRequestSent
+                  ? isFriend
+                    ? null
+                    : toggleRequest
+                  : sendFriendRequest
+              }
+              href={isFriend ? `/dash/message/to/${person._id}` : null}
+              className={isFriend && 'py-1 px-6'}
+            >
+              {isRequestSent ? (
+                isFriend ? (
+                  <img src={chatDotsSvg} className="w-6 h-6 hover:h-8" />
+                ) : (
+                  'Request Sent'
+                )
+              ) : isFriend ? (
+                <img src={chatDotsSvg} className="w-7 h-7" />
+              ) : (
+                'Add Friend'
+              )}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

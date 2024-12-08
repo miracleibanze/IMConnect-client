@@ -28,7 +28,9 @@ const Notice = ({
         onClick={onClick}
       >
         <span>{message}</span>
-        <span className="w-full text-end text-sm">Click to view</span>
+        {onClick && (
+          <span className="w-full text-end text-sm">Click to view</span>
+        )}
       </div>
     )
   );

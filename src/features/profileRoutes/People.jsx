@@ -68,7 +68,7 @@ const People = () => {
         />
       </h5>
       {viewRequests && (
-        <div className="relative">
+        <div className="relative flex flex-col gap-y-2">
           {requests?.length > 0 ? (
             <>
               {requests.map((person) => (
@@ -105,7 +105,7 @@ const People = () => {
           className={`w-6 h-6 ${viewMyFriends && 'rotate-180'}`}
         />
       </h5>
-      <div className="relative">
+      <div className="relative flex flex-col gap-y-2">
         {viewMyFriends && (
           <>
             {friends?.length > 0 ? (
@@ -129,7 +129,7 @@ const People = () => {
         )}
       </div>
       <h5 className="h5 w-full mb-4 font-semibold px-4">People you may know</h5>
-      <div className="relative h-full">
+      <div className="relative flex flex-col gap-y-2 h-full">
         {!loadingnonFriends ? (
           <>
             {nonFriends?.length > 0 ? (
