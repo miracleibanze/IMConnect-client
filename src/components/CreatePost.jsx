@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import Button from './design/Button';
-import { plusSvg, userSvg } from '../assets';
+import { loaderSvg, plusSvg, userSvg } from '../assets';
 import { postFeeling, postIcons } from './constants';
 import Loader from './skeletons/Loader';
 import axiosInstance from '../features/utils/axiosInstance';
@@ -20,8 +20,10 @@ const CreatePost = () => {
   const [uploadStatus, setUploadStatus] = useState(false);
   const [images, setImages] = useState([]);
   const [myDescription, setMyDescription] = useState(``);
+  const [creatingPost, setCreatingPost] = useState(false);
 
   const savePost = async () => {
+    setCreatingPost(true);
     const myPostObject = {
       user: user._id,
       images: images,
@@ -35,6 +37,8 @@ const CreatePost = () => {
       }
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setCreatingPost(false);
     }
   };
 
@@ -61,7 +65,12 @@ const CreatePost = () => {
 
   return (
     <>
-      <div className="h-full w-full flex-center-both bg-zinc-100 rounded-md">
+      <div className="h-full w-full flex-center-both bg-zinc-100 relative rounded-md">
+        {creatingPost && (
+          <div className="absolute inset-0 z-[100] bg-zinc-50/50 flex-center-both">
+            <img src={loaderSvg} className="w-10 h-10" />
+          </div>
+        )}
         <div className=" relative w-full max-w-lg h-[32rem] min-h-max shadow-2xl bg-zinc-50 border p-3 shadow-zinc-500">
           <p className="body-1 font-semibold">Create a Post</p>
           <div className="flex-between-hor gap-3 mt-4">
