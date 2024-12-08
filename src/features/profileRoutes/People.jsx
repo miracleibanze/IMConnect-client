@@ -14,8 +14,8 @@ const People = () => {
   const [viewRequests, setViewRequests] = useState(false);
   const [requests, setRequests] = useState();
   const context = useContext(AppContext);
-  if (!context) return <WelcomeSkeleton />;
   const { user, usePageTitle } = context;
+  if (!context || !user) return <WelcomeSkeleton />;
   usePageTitle('People | IMConnect');
 
   useEffect(() => {

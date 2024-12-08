@@ -89,6 +89,7 @@ export const MessageCard = ({ person, messageChanged }) => {
     </div>
   );
 };
+
 const MessageComponent = () => {
   const context = useContext(AppContext);
   const { user, usePageTitle, messageChanged } = context || {};

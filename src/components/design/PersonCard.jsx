@@ -12,6 +12,7 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
   const [confirmed, setConfirmed] = useState(false);
   const [notice, setNotice] = useState('');
   const [declined, setDeclined] = useState(false);
+  const [sendingRequest, setSendingRequest] = useState(false);
 
   useEffect(() => {
     if (person.requestSent) {
@@ -42,6 +43,7 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
   };
 
   const acceptRequest = async () => {
+    setSendingRequest(true);
     try {
       const response = await axiosInstance.post(
         `/users/respond-friend-request/${person._id}`,
@@ -61,6 +63,8 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
     } catch (error) {
       console.error('Error accepting friend request:', error);
       setNotice('An error occurred while accepting the request.');
+    } finally {
+      setSendingRequest(false);
     }
   };
 
@@ -151,8 +155,10 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
                 )
               ) : isFriend ? (
                 <img src={chatDotsSvg} className="w-7 h-7" />
-              ) : (
+              ) : !sendingRequest ? (
                 'Add Friend'
+              ) : (
+                'sending'
               )}
             </Button>
           )}
