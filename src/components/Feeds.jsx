@@ -5,6 +5,7 @@ import axiosInstance from '../features/utils/axiosInstance';
 import { useLocation } from 'react-router-dom';
 import FeedsSkeleton from './skeletons/FeedsSkeleton';
 import { AppContext } from './AppContext';
+import Button from './design/Button';
 
 const Feeds = () => {
   const { user } = useContext(AppContext);
@@ -107,22 +108,26 @@ const Feeds = () => {
                       />
                     </div>
                   ))}
-                  <div className="flex justify-between">
+                  <div className="flex-center-both gap-2">
                     {peoplePage > 1 && (
-                      <button
+                      <Button
+                        blue
+                        rounded
                         className="btn btn-secondary"
                         onClick={() => setPeoplePage((prev) => prev - 1)}
                       >
                         Previous
-                      </button>
+                      </Button>
                     )}
                     {hasMorePeople && (
-                      <button
+                      <Button
+                        blue
+                        rounded
                         className="btn btn-primary"
                         onClick={() => setPeoplePage((prev) => prev + 1)}
                       >
-                        Next
-                      </button>
+                        More stories
+                      </Button>
                     )}
                   </div>
                 </>
@@ -153,20 +158,24 @@ const Feeds = () => {
                   ))}
                   <div className="flex-center-hor">
                     {postPage > 1 && (
-                      <button
+                      <Button
+                        blue
+                        rounded
                         className="btn btn-secondary"
                         onClick={() => setPostPage((prev) => prev - 1)}
                       >
                         Previous
-                      </button>
+                      </Button>
                     )}
                     {hasMorePosts && (
-                      <button
+                      <Button
+                        blue
+                        rounded
                         className="btn btn-primary"
                         onClick={() => setPostPage((prev) => prev + 1)}
                       >
-                        More
-                      </button>
+                        More stories
+                      </Button>
                     )}
                   </div>
                 </>
