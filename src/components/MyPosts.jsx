@@ -41,10 +41,14 @@ const MyPosts = () => {
           `(${posts?.length || 0})`
         )}
       </h5>
-      <div className="relative h-full min-h-max w-full flex">
+      <div className="relative h-full min-h-max w-full flex flex-col gap-3">
         {loading && <ListSkeleton />}
         {posts.length > 0 ? (
-          posts.map((post) => <PostCard post={post} />)
+          posts.map((post) => (
+            <div className="p-3 border border-zinc-400/50 rounded-md">
+              <PostCard post={post} />
+            </div>
+          ))
         ) : (
           <p className="h-max w-full rounded-md flex-center-both text-zinc-700/70 font-semibold body-1">
             You don't have post yet.

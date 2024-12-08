@@ -92,7 +92,7 @@ const PostCard = ({ post, className }) => {
           />
         )}
       </div>
-      <div className="caption leading-[0.82rem] py-2 text-zinc-700 post-description">
+      <div className="caption pb-2 text-zinc-700 post-description pt-6">
         {post.description.split('\n').map((line, index) => (
           <React.Fragment key={index}>
             {line}
