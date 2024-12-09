@@ -57,7 +57,7 @@ const Navbar = (props) => {
           <img
             src={user?.image || userSvg}
             alt="user-avatar"
-            className="h-9 min-w-9 -my-2 -mx-3 bg-zinc-100 object-fit object-center"
+            className="h-9 min-w-9 -my-2 -mx-3 bg-zinc-100 object-contain object-center"
           />
         </Button>
       </div>

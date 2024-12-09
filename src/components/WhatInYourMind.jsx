@@ -46,7 +46,9 @@ const WhatInYourMind = ({ className }) => {
           loading="lazy"
           src={user?.image ? user.image : userSvg}
           className={`w-8 aspect-square border rounded-md border-zinc-500 ${
-            !user ? 'object-fit object-center p-1' : 'object-top object-cover'
+            !user
+              ? 'object-fit object-center p-1'
+              : 'object-center object-cover'
           }`}
         />
         <input

@@ -10,6 +10,7 @@ import {
 import Loader from '../skeletons/Loader';
 import axiosInstance from '../../features/utils/axiosInstance';
 import { AppContext } from '../AppContext';
+import Notice from './Notice';
 
 const PostCard = ({ post, className }) => {
   const context = useContext(AppContext);
@@ -19,6 +20,7 @@ const PostCard = ({ post, className }) => {
 
   // State Management
   const [liked, setLiked] = useState(false);
+  const [notice, setNotice] = useState('');
   const [postLikes, setPostLikes] = useState(post?.likes || 0);
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const PostCard = ({ post, className }) => {
     } else {
       setLiked(false);
     }
+    console.log(post);
   }, [post, user?._id]);
 
   const handleLike = async () => {
@@ -35,11 +38,12 @@ const PostCard = ({ post, className }) => {
         userId: user._id,
       });
 
-      if (response.data.message === 'Post liked successfully') {
+      if (response.data.message === 'ok') {
         setLiked(!liked); // Toggle liked state
-        setPostLikes((prevLikes) => prevLikes + (liked ? -1 : 1)); // Update likes
+        setPostLikes(response.data.likes); // Update likes
       } else {
-        alert(response.data.message);
+        setLiked(!liked); // Toggle liked state
+        setNotice(response.data.message);
       }
     } catch (err) {
       console.error(
@@ -64,6 +68,7 @@ const PostCard = ({ post, className }) => {
         className ? className : 'bg-zinc-100'
       }`}
     >
+      <Notice message={notice} onCancel={() => setNotice('')} />
       <div className="flex justify-between items-center border-b border-zinc-400/20 pb-2">
         <div className="flex items-center cursor-pointer gap-2 group">
           <img
@@ -128,15 +133,18 @@ const PostCard = ({ post, className }) => {
             src={liked ? thumbsUpBlueSvg : thumbsUpSvg}
             className="h-6"
           />
-          {liked ? 'Liked' : 'Like'}
         </div>
-        <div className="w-full flex-center-hor gap-3">
+        <div
+          className="w-full flex-center-hor gap-3"
+          onClick={() => setNotice('Functionality not yet set')}
+        >
           <img loading="lazy" src={commentSvg} className="h-6" />
-          Comment
         </div>
-        <div className="w-full flex-center-hor gap-3">
+        <div
+          className="w-full flex-center-hor gap-3"
+          onClick={() => setNotice('Functionality not yet set')}
+        >
           <img loading="lazy" src={shareSvg} className="h-6" />
-          Share
         </div>
       </div>
     </div>
