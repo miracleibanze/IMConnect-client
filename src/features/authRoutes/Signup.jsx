@@ -54,32 +54,26 @@ const Signup = () => {
       };
     }
   };
+
   const handleViewPassword = () => {
-    if (!viewPassword) {
-      setViewPassword(true);
-    } else {
-      setViewPassword(false);
-    }
-    console.log(viewPassword);
+    setViewPassword(!viewPassword);
   };
 
   const postData = async () => {
     setLoading(true);
-    console.log(userData);
     try {
       const response = await axiosInstance.post('/users', userData);
       setUser(response.data);
-      console.log(response.data);
       setIsLogged(true);
       navigate('/dash');
     } catch (error) {
       setError(error?.response?.data?.message || error?.message);
       setRegisterPage(0);
-      console.log(error);
     } finally {
       setLoading(false);
     }
   };
+
   const handleSubmit = () => {
     postData();
   };
@@ -88,24 +82,21 @@ const Signup = () => {
     const rawDate = e.target.value;
 
     if (rawDate) {
-      const [year, month, day] = rawDate.split('-');
       const selectedDate = new Date(rawDate);
       const maxDate = new Date(new Date().getFullYear() - 2, 11, 31); // Dec 31, 2 years ago
-      const minDate = new Date(1900, 0, 1); // Jan 1, 1900
 
-      if (selectedDate > maxDate || selectedDate < minDate) {
-        alert('Please select a valid birth date!');
+      if (selectedDate > maxDate) {
+        setError(`You are entering invalid birthdate`);
         e.target.value = ''; // Clear the invalid input
         setFormattedDate(''); // Clear formatted date
         return;
       }
 
-      setFormattedDate(`${day}/${month}/${year}`); // Format and set the valid date
+      setFormattedDate(new Date(rawDate).toLocaleDateString()); // Format and set the valid date
     } else {
       setFormattedDate(''); // Clear formatted date if no input
     }
   };
-
   const getValidMaxDate = () => {
     const today = new Date();
     const maxDate = new Date(today.getFullYear() - 2, 11, 31);

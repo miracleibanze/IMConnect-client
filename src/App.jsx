@@ -37,6 +37,11 @@ const App = () => {
     }
   }, [messageChanged]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (notice) setNotice('');
+    }, 1000);
+  }, []);
   return (
     <>
       <Notice
