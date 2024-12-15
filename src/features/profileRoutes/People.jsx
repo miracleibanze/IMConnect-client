@@ -46,7 +46,17 @@ const People = () => {
 
     handlePeople();
     handleRequest();
-  }, [user]); // Dependency array makes sure this runs when user changes
+  }, [user]);
+
+  const confirmRequest = (person) => {
+    const index = requests.findIndex((req) => req === person);
+
+    if (index > -1) {
+      requests.splice(index, 1);
+    }
+
+    requests.push(person);
+  };
 
   return (
     <div className="min-h-full h-max bg-zinc-100 rounded-md w-full p-4 relative flex flex-col">
@@ -78,6 +88,7 @@ const People = () => {
                   requests
                   userId={user._id}
                   className="hover:bg-zinc-200/50"
+                  confirmRequest={confirmRequest}
                 />
               ))}
             </>

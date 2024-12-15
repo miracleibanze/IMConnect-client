@@ -15,7 +15,7 @@ const Notice = ({ message, onClose = () => {}, duration = 3000, onClick }) => {
   return (
     (message !== '' || message !== null || message !== undefined) && (
       <div
-        className={`fixed flex flex-col bottom-5 right-0 bg-neutral-900/30 text-white z-[9999] px-4 py-2 rounded-lg shadow-md transition-transform min-h-[6rem] shadow-slate-50 duration-500 ease-in-out transform ${
+        className={`fixed flex flex-col bottom-5 right-0 bg-neutral-900/80 text-white z-[9999] px-4 py-2 rounded-lg shadow-md transition-transform min-h-[6rem] shadow-slate-50 duration-500 ease-in-out transform ${
           message ? 'translate-x-0' : 'translate-x-full'
         }`}
         onClick={onClick}

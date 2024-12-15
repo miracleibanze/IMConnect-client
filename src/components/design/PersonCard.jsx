@@ -4,20 +4,26 @@ import Button from './Button';
 import axiosInstance from '../../features/utils/axiosInstance';
 import Notice from './Notice';
 
-const PersonCard = ({ person, className, friends, userId, requests }) => {
+const PersonCard = ({
+  person,
+  className,
+  friends,
+  userId,
+  requests,
+  confirmRequest,
+}) => {
   const [isRequestSent, setIsRequestSent] = useState(
     person.requestSent || false
   ); // Set initial state based on person.requestSent
   const [isFriend, setIsFriend] = useState(friends);
-  const [confirmed, setConfirmed] = useState(false);
   const [notice, setNotice] = useState('');
   const [declined, setDeclined] = useState(false);
   const [sendingRequest, setSendingRequest] = useState(false);
 
   useEffect(() => {
-    if (person.requestSent) {
-      setIsRequestSent(true);
-    }
+    person?.friendRequests?.map((item) => {
+      if (item === userId) setIsRequestSent(true);
+    });
   });
   const sendFriendRequest = async () => {
     try {
@@ -54,7 +60,7 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
       );
 
       if (response.status === 200) {
-        setConfirmed(true);
+        confirmRequest(person);
         setNotice('Friend request accepted!');
         setIsFriend(true);
       } else {
@@ -93,12 +99,6 @@ const PersonCard = ({ person, className, friends, userId, requests }) => {
     setIsRequestSent(false);
     setNotice('Your friend request is being withdrawn.');
   };
-
-  useEffect(() => {
-    if (isRequestSent) {
-      setNotice('Friend request sent.');
-    }
-  }, [isRequestSent]);
 
   return (
     <div
