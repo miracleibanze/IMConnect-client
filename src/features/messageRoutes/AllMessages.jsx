@@ -96,6 +96,7 @@ const MessageComponent = () => {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [portifolioMessages, setPortifolioMessages] = useState([]);
 
   if (!context || !context?.user) return <ListSkeleton message />;
 
@@ -107,6 +108,10 @@ const MessageComponent = () => {
         setLoading(true);
         const response = await axiosInstance.get(`/messages/${user?.username}`);
         setFriends(response.data || []);
+        if (user?.email === 'miracleibanze@gmail.com') {
+          const response = await axiosInstance.get('/work');
+          setPortifolioMessages(response.data);
+        }
       } catch (err) {
         console.error(err);
         setError('Failed to load messages. Please try again.');
@@ -175,6 +180,20 @@ const MessageComponent = () => {
           </div>
         )}
       </div>
+      {user.email === 'miracleibanze@gmail.com' && (
+        <div className="w-full p-4 bg-blue-400">
+          {portifolioMessages?.map((item) => (
+            <div className="border p-3 rounded-md">
+              <h5 className="h5">{item.names}</h5>
+              <div className="body-2 leading-none mb-4 italic flex-between-hor w-full gap-4">
+                <span>{item.email}</span>
+                <span>{item.phone}</span>
+              </div>
+              <span className="body-1">{item.message}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
