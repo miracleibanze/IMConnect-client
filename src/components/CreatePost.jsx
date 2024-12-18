@@ -24,6 +24,7 @@ const CreatePost = () => {
   const [creatingPost, setCreatingPost] = useState(false);
 
   const savePost = async () => {
+    if (creatingPost) return;
     setCreatingPost(true);
     const myPostObject = {
       user: user._id,
@@ -173,8 +174,15 @@ const CreatePost = () => {
             </div>
           </div>
           <div className="w-full py-3 flex justify-end">
-            <Button blue onClick={savePost}>
-              Post
+            <Button blue onClick={savePost} disabled={creatingPost}>
+              {creatingPost ? (
+                <span className="flex-center-hor gap-2">
+                  <img src={loaderSvg} alt="loader" className="w-4 h-4" />
+                  Posting
+                </span>
+              ) : (
+                'Post'
+              )}
             </Button>
           </div>
         </div>
