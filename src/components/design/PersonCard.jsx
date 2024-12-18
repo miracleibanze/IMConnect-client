@@ -10,6 +10,7 @@ const PersonCard = ({
   friends,
   userId,
   requests,
+  noAction,
   confirmRequest,
 }) => {
   const [isRequestSent, setIsRequestSent] = useState(
@@ -119,7 +120,9 @@ const PersonCard = ({
           </p>
           <p className="text-sm font-light">{person.username}</p>
         </a>
-        <div className="flex justify-end items-center gap-2">
+        <div
+          className={`flex justify-end items-center gap-2 ${noAction && 'hidden'}`}
+        >
           {requests && !declined && (
             <Button border rounded light onClick={declineRequest}>
               Decline

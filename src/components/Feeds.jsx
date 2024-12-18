@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PostCard from './design/PostCard';
 import PersonCard from './design/PersonCard';
 import axiosInstance from '../features/utils/axiosInstance';
@@ -15,7 +15,6 @@ const Feeds = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const topRef = useRef(null);
 
   const [postPage, setPostPage] = useState(1);
   const [peoplePage, setPeoplePage] = useState(1);
@@ -23,13 +22,17 @@ const Feeds = () => {
 
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [hasMorePeople, setHasMorePeople] = useState(true);
+  const [loadingMorePosts, setLoadingMorePosts] = useState(false);
+  const [loadingMorePeople, setLoadingMorePeople] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const nameParam = queryParams.get('name');
   const textParam = queryParams.get('text');
 
   const fetchFeeds = async () => {
-    setLoading(true);
+    if (postPage === 1 && peoplePage === 1) {
+      setLoading(true);
+    }
     setError(null);
 
     try {
@@ -42,12 +45,31 @@ const Feeds = () => {
         );
 
         if (nameParam) {
-          setPeople(response.data.users || []);
+          setPeople((prevPeople) => {
+            const newPeople = response.data.users || [];
+            const uniquePeople = [
+              ...prevPeople,
+              ...newPeople.filter(
+                (newPerson) =>
+                  !prevPeople.some((person) => person._id === newPerson._id)
+              ),
+            ];
+            return uniquePeople;
+          });
           setHasMorePeople(response.data.users?.length === itemsPerPage);
         }
 
         if (textParam) {
-          setPosts(response.data.posts || []);
+          setPosts((prevPosts) => {
+            const newPosts = response.data.posts || [];
+            const uniquePosts = [
+              ...prevPosts,
+              ...newPosts.filter(
+                (newPost) => !prevPosts.some((post) => post._id === newPost._id)
+              ),
+            ];
+            return uniquePosts;
+          });
           setHasMorePosts(response.data.posts?.length === itemsPerPage);
         }
       } else if (user) {
@@ -59,17 +81,87 @@ const Feeds = () => {
             `/latest-users/${user.username}?page=${peoplePage}&limit=${itemsPerPage}`
           ),
         ]);
-        setPeople(usersResponse.data.users || []);
+
+        setPeople((prevPeople) => {
+          const newPeople = usersResponse.data.users || [];
+          const uniquePeople = [
+            ...prevPeople,
+            ...newPeople.filter(
+              (newPerson) =>
+                !prevPeople.some((person) => person._id === newPerson._id)
+            ),
+          ];
+          return uniquePeople;
+        });
         setHasMorePeople(usersResponse.data.users.length === itemsPerPage);
 
-        setPosts(postsResponse.data.posts || []);
+        setPosts((prevPosts) => {
+          const newPosts = postsResponse.data.posts || [];
+          const uniquePosts = [
+            ...prevPosts,
+            ...newPosts.filter(
+              (newPost) => !prevPosts.some((post) => post._id === newPost._id)
+            ),
+          ];
+          return uniquePosts;
+        });
         setHasMorePosts(postsResponse.data.posts.length === itemsPerPage);
       }
     } catch (err) {
       console.error('Error fetching feeds:', err);
       setError('Failed to fetch feeds. Please try again.');
     } finally {
-      setLoading(false);
+      if (postPage === 1 && peoplePage === 1) {
+        setLoading(false);
+      }
+    }
+  };
+
+  const loadMorePosts = async () => {
+    if (loadingMorePosts || !hasMorePosts) return;
+
+    setLoadingMorePosts(true);
+
+    const postParams = textParam ? `&text=${textParam}` : '';
+    const nameParams = nameParam ? `&name=${nameParam}` : '';
+
+    try {
+      const response = await axiosInstance.get(
+        `/search?page=${postPage + 1}&limit=${itemsPerPage}${postParams}${nameParams}`
+      );
+
+      setPosts((prevPosts) => [...prevPosts, ...response.data.posts]);
+      setHasMorePosts(response.data.posts.length === itemsPerPage);
+      setPostPage((prev) => prev + 1);
+
+      // Scroll to the bottom after loading more posts
+    } catch (err) {
+      console.error('Error fetching more posts:', err);
+    } finally {
+      setLoadingMorePosts(false);
+    }
+  };
+
+  const loadMorePeople = async () => {
+    if (loadingMorePeople || !hasMorePeople) return;
+
+    setLoadingMorePeople(true);
+
+    const postParams = textParam ? `&text=${textParam}` : '';
+    const nameParams = nameParam ? `&name=${nameParam}` : '';
+
+    try {
+      const response = await axiosInstance.get(
+        `/search?page=${peoplePage + 1}&limit=${itemsPerPage}${postParams}${nameParams}`
+      );
+
+      setPeople((prevPeople) => [...prevPeople, ...response.data.users]);
+      setHasMorePeople(response.data.users.length === itemsPerPage);
+      setPeoplePage((prev) => prev + 1);
+    } catch (err) {
+      console.error('Error fetching more people:', err);
+    } finally {
+      setLoadingMorePeople(false);
     }
   };
 
@@ -79,56 +171,41 @@ const Feeds = () => {
 
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
-  useEffect(() => {
-    if (topRef.current) {
-      topRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [postPage, peoplePage]);
-
-  if (error) return <div className="text-red-500 text-center">{error}</div>;
-
   return (
     <div className="w-full min-h-screen bg-zinc-200 py-3 rounded-md">
-      <div ref={topRef} className="-translate-y-[12rem]" />
       {/* People Section */}
       {nameParam && (
         <div className="py-3 w-full">
           <h4 className="h4 font-semibold px-4 border-b border-zinc-500/50">
             People
           </h4>
-          <div className="relative w-full h-max flex flex-col gap-2">
+          <div className="relative w-full h-max flex flex-col gap-2 p-3">
             {!loading ? (
               people.length > 0 ? (
                 <>
                   {people.map((person) => (
-                    <div key={person._id} className="h-max relative">
+                    <div
+                      key={person._id}
+                      className="h-max relative bg-zinc-100 rounded-md"
+                    >
                       <PersonCard
                         person={person}
+                        noAction
                         className="hover:bg-zinc-100/70"
                       />
                     </div>
                   ))}
                   <div className="flex-center-both gap-2">
-                    {peoplePage > 1 && (
-                      <Button
-                        blue
-                        rounded
-                        className="btn btn-secondary"
-                        onClick={() => setPeoplePage((prev) => prev - 1)}
-                      >
-                        Previous
-                      </Button>
-                    )}
-                    {hasMorePeople && (
+                    {hasMorePeople ? (
                       <Button
                         blue
                         rounded
                         className="btn btn-primary"
-                        onClick={() => setPeoplePage((prev) => prev + 1)}
+                        onClick={loadMorePeople}
                       >
-                        More stories
+                        {loadingMorePeople ? 'Loading...' : 'More stories'}
                       </Button>
-                    )}
+                    ) : null}
                   </div>
                 </>
               ) : (
@@ -157,26 +234,16 @@ const Feeds = () => {
                     <PostCard key={post._id} post={post} />
                   ))}
                   <div className="flex-center-hor">
-                    {postPage > 1 && (
-                      <Button
-                        blue
-                        rounded
-                        className="btn btn-secondary"
-                        onClick={() => setPostPage((prev) => prev - 1)}
-                      >
-                        Previous
-                      </Button>
-                    )}
-                    {hasMorePosts && (
+                    {hasMorePosts ? (
                       <Button
                         blue
                         rounded
                         className="btn btn-primary"
-                        onClick={() => setPostPage((prev) => prev + 1)}
+                        onClick={loadMorePosts}
                       >
-                        More stories
+                        {loadingMorePosts ? 'Loading...' : 'More stories'}
                       </Button>
-                    )}
+                    ) : null}
                   </div>
                 </>
               ) : (
